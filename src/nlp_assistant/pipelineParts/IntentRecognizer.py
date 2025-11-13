@@ -7,6 +7,8 @@ from sklearn.pipeline import make_pipeline
 
 class IntentRecognizer:
 
+    MODEL_PATH = "src/nlp_assistant/data/models/intent_model.joblib"
+
     def trainIntentRecognizerModel(training_data:pd.DataFrame): 
         """
         Transformiert die Trainingsdaten in einen Vektor, trainiert einen Support Vector Classifier 
@@ -24,7 +26,7 @@ class IntentRecognizer:
         model.fit(sentences, labels)
 
         # Modell speichern
-        joblib.dump(model, "src/nlp_assistant/data/models/intent_model.joblib")
+        joblib.dump(model, IntentRecognizer.MODEL_PATH)
 
         print("Intent Recognizer Model erfolgreich auf den Testdaten trainiert und gespeichert.")
 
@@ -40,7 +42,7 @@ class IntentRecognizer:
         """
 
         # Modell laden und Vorhersage treffen
-        model = joblib.load("src/nlp_assistant/data/models/intent_model.joblib")
+        model = joblib.load(IntentRecognizer.MODEL_PATH)
         
         prediction = model.predict([text])[0]
         return prediction
