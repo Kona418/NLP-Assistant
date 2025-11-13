@@ -15,5 +15,5 @@ class TextToSpeech:
             str: Transkripierte Text als String.
 
         """
-        resultText = self.model.transcribe(audio_path)
-        return resultText["text"]
+        resultText = self.model.transcribe(audio_path, language='de')
+        return resultText["text"].strip()
