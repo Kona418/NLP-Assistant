@@ -28,6 +28,5 @@ class TestIntentRecognizer:
         predicted_intent = IntentRecognizer.predictIntentFromCommand(command)
 
         # Gib eine Fehlermeldung bei falscher Vorhersage aus
-        assert (
-            predicted_intent == expected_intent
-        ), f"FEHLER: Command:'{command}' Predicted: '{predicted_intent}' Korrekt: '{expected_intent}'"
+        assert (predicted_intent == expected_intent), \
+        f"FEHLER: Command:'{command}' Predicted: '{predicted_intent}' Korrekt: '{expected_intent}'"
