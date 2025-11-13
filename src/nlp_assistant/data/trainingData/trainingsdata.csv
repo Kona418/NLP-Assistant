@@ -1,0 +1,101 @@
+Command,Intent
+Wie warm ist es im Wohnzimmer?,get_value
+Wie hoch ist die Temperatur im Schlafzimmer?,get_value
+Wie ist die aktuelle Raumtemperatur in der Küche?,get_value
+Wie warm ist es im Bad?,get_value
+Welche Temperatur hat die Heizung im Wohnzimmer?,get_value
+Wie stark heizt die Heizung im Schlafzimmer gerade?,get_value
+Wie hell ist das Licht im Wohnzimmer?,get_value
+Wie hell ist es im Schlafzimmer?,get_value
+Welche Helligkeit hat das Licht in der Küche?,get_value
+Wie hell ist das Licht im Bad?,get_value
+Wie viel Strom verbraucht die Steckdose im Wohnzimmer?,get_value
+Ist die Steckdose in der Küche eingeschaltet?,get_value
+Wie hoch ist der Stromverbrauch im Schlafzimmer?,get_value
+Wie ist der Status der Klimaanlage im Wohnzimmer?,get_value
+Welche Temperatur hat die Klimaanlage im Schlafzimmer?,get_value
+Wie kalt ist es in der Küche?,get_value
+Wie warm bläst die Klimaanlage im Bad?,get_value
+Ist das Licht im Wohnzimmer an?,get_value
+Ist die Heizung im Schlafzimmer aktiv?,get_value
+Wie viel Grad zeigt das Thermostat im Wohnzimmer?,get_value
+Welche Leistung hat die Steckdose im Bad aktuell?,get_value
+Wie viel Energie verbraucht die Klimaanlage im Schlafzimmer?,get_value
+Wie hell ist die Lampe über dem Esstisch in der Küche?,get_value
+Wie stark läuft die Klimaanlage im Flur?,get_value
+Wie ist der Zustand der Heizung im Bad?,get_value
+Stelle die Heizung im Wohnzimmer auf 22 Grad,set_value
+Erhöhe die Temperatur im Schlafzimmer auf 24 Grad,set_value
+Reduziere die Heizung in der Küche auf 19 Grad,set_value
+Stelle die Heizung im Bad auf 23 Grad ein,set_value
+Dimme das Licht im Wohnzimmer auf 50 Prozent,set_value
+Reduziere die Helligkeit im Schlafzimmer auf 30 Prozent,set_value
+Erhöhe die Lichtstärke in der Küche auf 80 Prozent,set_value
+Setze das Licht im Bad auf 60 Prozent,set_value
+Passe die Temperatur der Klimaanlage im Wohnzimmer auf 20 Grad an,set_value
+Stelle die Klimaanlage im Schlafzimmer auf 21 Grad,set_value
+Reduziere die Kühlleistung in der Küche leicht,set_value
+Erhöhe die Temperatur der Klimaanlage im Bad auf 25 Grad,set_value
+Setze die Steckdose im Wohnzimmer auf 50 Prozent Leistung,set_value
+Begrenze den Strom an der Steckdose in der Küche auf 70 Prozent,set_value
+Erhöhe die Leistung der Steckdose im Flur leicht,set_value
+Reduziere die Helligkeit im Wohnzimmer minimal,set_value
+Stelle die Heizung im Schlafzimmer auf Energiesparmodus,set_value
+Passe die Lichtfarbe im Wohnzimmer auf Warm an,set_value
+Stelle die Klimaanlage in der Küche auf niedrige Stufe,set_value
+Mach die Mukke leiser,set_value
+Erhöhe die Lautstärke im Wohnzimmer auf 40,set_value
+Reduziere die Temperatur im Bad auf 20 Grad,set_value
+Stelle die Klimaanlage im Wohnzimmer auf Auto-Modus,set_value
+Passe die Helligkeit der Lampen in der Küche auf 40 Prozent an,set_value
+Erhöhe die Lautstärke der Musik,set_value
+Mach das Licht im Wohnzimmer an,turn_on
+Schalte die Heizung im Schlafzimmer ein,turn_on
+Mach die Steckdose in der Küche an,turn_on
+Schalte die Klimaanlage im Wohnzimmer ein,turn_on
+Mach das Licht im Schlafzimmer an,turn_on
+Schalte die Heizung im Wohnzimmer ein,turn_on
+Mach das Licht in der Küche an,turn_on
+Schalte die Heizung im Bad ein,turn_on
+Aktiviere die Steckdose im Wohnzimmer,turn_on
+Mach die Steckdose im Bad an,turn_on
+Starte die Klimaanlage im Schlafzimmer,turn_on
+Mach die Klimaanlage in der Küche an,turn_on
+Schalte das Licht im Bad ein,turn_on
+Mach die Steckdose im Flur an,turn_on
+Schalte die Klimaanlage im Bad ein,turn_on
+Schalte die Heizung in der Küche ein,turn_on
+Mach die Lampen im Wohnzimmer an,turn_on
+Aktiviere das Licht im Schlafzimmer,turn_on
+Schalte die Klimaanlage im Wohnzimmer auf Kühlung,turn_on
+Mach die Steckdose im Wohnzimmer aktiv,turn_on
+Starte die Klimaanlage im Bad,turn_on
+Nimm die Heizung im Wohnzimmer in Betrieb,turn_on
+Mach die Beleuchtung in der Küche an,turn_on
+Schalte die Heizung im Flur ein,turn_on
+Aktiviere die Klimaanlage im Wohnzimmer,turn_on
+Mach das Licht im Wohnzimmer aus,turn_off
+Schalte die Heizung im Schlafzimmer aus,turn_off
+Mach die Steckdose in der Küche aus,turn_off
+Schalte die Klimaanlage im Wohnzimmer aus,turn_off
+Mach das Licht im Schlafzimmer aus,turn_off
+Schalte die Heizung im Wohnzimmer ab,turn_off
+Mach das Licht in der Küche aus,turn_off
+Schalte die Heizung im Bad aus,turn_off
+Deaktiviere die Steckdose im Wohnzimmer,turn_off
+Mach die Steckdose im Bad aus,turn_off
+Stoppe die Klimaanlage im Schlafzimmer,turn_off
+Mach die Klimaanlage in der Küche aus,turn_off
+Schalte das Licht im Bad aus,turn_off
+Mach die Steckdose im Flur aus,turn_off
+Schalte die Klimaanlage im Bad ab,turn_off
+Schalte die Heizung in der Küche ab,turn_off
+Mach die Lampen im Wohnzimmer aus,turn_off
+Deaktiviere das Licht im Schlafzimmer,turn_off
+Schalte die Klimaanlage im Wohnzimmer komplett aus,turn_off
+Mach die Steckdose im Wohnzimmer aus,turn_off
+Stoppe die Klimaanlage im Bad,turn_off
+Nimm die Heizung im Wohnzimmer außer Betrieb,turn_off
+Mach die Beleuchtung in der Küche aus,turn_off
+Schalte die Heizung im Flur ab,turn_off
+Deaktiviere die Klimaanlage im Wohnzimmer,turn_off
