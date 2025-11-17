@@ -9,15 +9,9 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "pandas (>=2.3.3,<3.0.0)",
-<<<<<<< HEAD
-    "requests (>=2.32.5,<3.0.0)",
-    "pytest (>=9.0.1,<10.0.0)",
-    "python-dotenv (>=1.2.1,<2.0.0)"
-=======
     "regex (>=2025.11.3,<2026.0.0)",
     "openai-whisper (>=20250625,<20250626)",
     "pytest (>=9.0.1,<10.0.0)",
->>>>>>> 0668dda2e0ce26719f2f811c678d32a4a0cd54ef
 ]
 
 [tool.poetry]
@@ -29,3 +23,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 start = "nlp_assistant.main:main"
+trainIntentRecognizerModel = "nlp_assistant.helper.IntentRecognizerController:trainIntentRecognizerModel"

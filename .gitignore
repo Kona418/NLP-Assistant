@@ -56,4 +56,7 @@ venv/
 .env
 
 # Models
-src/nlp_assistant/data/models/intent_model.joblib
+# src/nlp_assistant/data/models/intent_model.joblib
+
+# Python Poetry lock file
+poetry.lock
