@@ -51,3 +51,9 @@ Thumbs.db
 # Virtual enviroment
 .venv
 venv/
+
+# Environment variables
+.env
+
+# Models
+src/nlp_assistant/data/models/intent_model.joblib
