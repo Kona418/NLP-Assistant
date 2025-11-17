@@ -1,6 +1,7 @@
 import requests
 import os
 import dotenv
+import json
 
 dotenv.load_dotenv()
 
@@ -120,3 +121,6 @@ def getDeviceList() -> dict:
 
             final_device_list.append(device_dict)
     return final_device_list
+
+if __name__ == "__main__":
+    print(json.dumps(getDeviceList(), indent=4, ensure_ascii=False))

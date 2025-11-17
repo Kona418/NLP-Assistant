@@ -1,0 +1,176 @@
+[
+    {
+        "name": "Deckenlampe",
+        "entity_id": "light.deckenlampe",
+        "type": "light",
+        "actions": [
+            "turn_on",
+            "turn_off",
+            "toggle"
+        ],
+        "capabilities": {
+            "can_set_brightness": true,
+            "can_set_color_temp": true,
+            "min_temp_kelvin": 2700,
+            "max_temp_kelvin": 6500
+        }
+    },
+    {
+        "name": "WiZ Tunable White C490A3",
+        "entity_id": "light.wiz_tunable_white_c490a3",
+        "type": "light",
+        "actions": [
+            "turn_on",
+            "turn_off",
+            "toggle"
+        ],
+        "capabilities": {
+            "can_set_brightness": true,
+            "can_set_color_temp": true,
+            "min_temp_kelvin": 2700,
+            "max_temp_kelvin": 6500
+        }
+    },
+    {
+        "name": "WiZ Tunable White C48FF7",
+        "entity_id": "light.wiz_tunable_white_c48ff7",
+        "type": "light",
+        "actions": [
+            "turn_on",
+            "turn_off",
+            "toggle"
+        ],
+        "capabilities": {
+            "can_set_brightness": true,
+            "can_set_color_temp": true,
+            "min_temp_kelvin": 2700,
+            "max_temp_kelvin": 6500
+        }
+    },
+    {
+        "name": "WiZ Tunable White C4869F",
+        "entity_id": "light.wiz_tunable_white_c4869f",
+        "type": "light",
+        "actions": [
+            "turn_on",
+            "turn_off",
+            "toggle"
+        ],
+        "capabilities": {
+            "can_set_brightness": true,
+            "can_set_color_temp": true,
+            "min_temp_kelvin": 2700,
+            "max_temp_kelvin": 6500
+        }
+    },
+    {
+        "name": "TV Steckdose Steckdose 1",
+        "entity_id": "switch.tv_steckdose_steckdose_1",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "Netzwerk Steckdose Kindersicherung",
+        "entity_id": "switch.netzwerk_steckdose_kindersicherung",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "Netzwerk Steckdose Steckdose 1",
+        "entity_id": "switch.netzwerk_steckdose_steckdose_1",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "MSS210-286b OutLet1",
+        "entity_id": "switch.mss210_286b_outlet1",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "Babyschrei-Erkennung",
+        "entity_id": "switch.werkbank_kamera_babyschrei_erkennung",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "switch.werkbank_kamera",
+        "entity_id": "switch.werkbank_kamera",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "LED",
+        "entity_id": "switch.werkbank_kamera_led",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "Bewegungserkennung",
+        "entity_id": "switch.werkbank_kamera_bewegungserkennung",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "Personenerkennung",
+        "entity_id": "switch.werkbank_kamera_personenerkennung",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    },
+    {
+        "name": "Manipulationserkennung",
+        "entity_id": "switch.werkbank_kamera_manipulationserkennung",
+        "type": "switch",
+        "actions": [
+            "turn_off",
+            "turn_on",
+            "toggle"
+        ],
+        "capabilities": {}
+    }
+]
