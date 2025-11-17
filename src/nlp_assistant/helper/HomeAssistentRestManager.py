@@ -14,6 +14,18 @@ headers: dict = {
 }
 
 def postAction(action_data: dict, device_list: list) -> list | None:
+    """
+    Führt eine Aktion (Service-Call) gegen die Home Assistant API aus.
+
+    Extrahiert Domain und Service aus den Aktionsdaten und löst bei Bedarf einen Gerätenamen über die device_list in eine entity_id auf.
+
+    Args:
+        action_data (dict): Dictionary mit Schlüsseln 'domain', 'service' sowie 'name' oder 'entity_id'. Modifiziert das Dictionary (pop).
+        device_list (list): Liste bekannter Geräte zur Namensauflösung, falls nur 'name' gegeben ist.
+
+    Returns:
+        List|none: Die JSON-Antwort der API bei Erfolg, sonst None bei Fehlern oder fehlenden Daten.
+    """
     try:
         domain: str = action_data.pop("domain")
         service: str = action_data.pop("service")
