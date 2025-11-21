@@ -1,101 +1,101 @@
 Command,Intent
-Wie warm ist es im Wohnzimmer?,get_value
-Wie hoch ist die Temperatur im Schlafzimmer?,get_value
-Wie ist die aktuelle Raumtemperatur in der Küche?,get_value
-Wie warm ist es im Bad?,get_value
-Welche Temperatur hat die Heizung im Wohnzimmer?,get_value
-Wie stark heizt die Heizung im Schlafzimmer gerade?,get_value
-Wie hell ist das Licht im Wohnzimmer?,get_value
-Wie hell ist es im Schlafzimmer?,get_value
-Welche Helligkeit hat das Licht in der Küche?,get_value
-Wie hell ist das Licht im Bad?,get_value
-Wie viel Strom verbraucht die Steckdose im Wohnzimmer?,get_value
-Ist die Steckdose in der Küche eingeschaltet?,get_value
-Wie hoch ist der Stromverbrauch im Schlafzimmer?,get_value
-Wie ist der Status der Klimaanlage im Wohnzimmer?,get_value
-Welche Temperatur hat die Klimaanlage im Schlafzimmer?,get_value
-Wie kalt ist es in der Küche?,get_value
-Wie warm bläst die Klimaanlage im Bad?,get_value
-Ist das Licht im Wohnzimmer an?,get_value
-Ist die Heizung im Schlafzimmer aktiv?,get_value
-Wie viel Grad zeigt das Thermostat im Wohnzimmer?,get_value
-Welche Leistung hat die Steckdose im Bad aktuell?,get_value
-Wie viel Energie verbraucht die Klimaanlage im Schlafzimmer?,get_value
-Wie hell ist die Lampe über dem Esstisch in der Küche?,get_value
-Wie stark läuft die Klimaanlage im Flur?,get_value
-Wie ist der Zustand der Heizung im Bad?,get_value
-Stelle die Heizung im Wohnzimmer auf 22 Grad,set_value
-Erhöhe die Temperatur im Schlafzimmer auf 24 Grad,set_value
-Reduziere die Heizung in der Küche auf 19 Grad,set_value
-Stelle die Heizung im Bad auf 23 Grad ein,set_value
-Dimme das Licht im Wohnzimmer auf 50 Prozent,set_value
-Reduziere die Helligkeit im Schlafzimmer auf 30 Prozent,set_value
-Erhöhe die Lichtstärke in der Küche auf 80 Prozent,set_value
-Setze das Licht im Bad auf 60 Prozent,set_value
-Passe die Temperatur der Klimaanlage im Wohnzimmer auf 20 Grad an,set_value
-Stelle die Klimaanlage im Schlafzimmer auf 21 Grad,set_value
-Reduziere die Kühlleistung in der Küche leicht,set_value
-Erhöhe die Temperatur der Klimaanlage im Bad auf 25 Grad,set_value
-Setze die Steckdose im Wohnzimmer auf 50 Prozent Leistung,set_value
-Begrenze den Strom an der Steckdose in der Küche auf 70 Prozent,set_value
-Erhöhe die Leistung der Steckdose im Flur leicht,set_value
-Reduziere die Helligkeit im Wohnzimmer minimal,set_value
-Stelle die Heizung im Schlafzimmer auf Energiesparmodus,set_value
-Passe die Lichtfarbe im Wohnzimmer auf Warm an,set_value
-Stelle die Klimaanlage in der Küche auf niedrige Stufe,set_value
-Mach die Mukke leiser,set_value
-Erhöhe die Lautstärke im Wohnzimmer auf 40,set_value
-Reduziere die Temperatur im Bad auf 20 Grad,set_value
-Stelle die Klimaanlage im Wohnzimmer auf Auto-Modus,set_value
-Passe die Helligkeit der Lampen in der Küche auf 40 Prozent an,set_value
-Erhöhe die Lautstärke der Musik,set_value
-Mach das Licht im Wohnzimmer an,turn_on
-Schalte die Heizung im Schlafzimmer ein,turn_on
-Mach die Steckdose in der Küche an,turn_on
-Schalte die Klimaanlage im Wohnzimmer ein,turn_on
-Mach das Licht im Schlafzimmer an,turn_on
-Schalte die Heizung im Wohnzimmer ein,turn_on
-Mach das Licht in der Küche an,turn_on
-Schalte die Heizung im Bad ein,turn_on
-Aktiviere die Steckdose im Wohnzimmer,turn_on
-Mach die Steckdose im Bad an,turn_on
-Starte die Klimaanlage im Schlafzimmer,turn_on
-Mach die Klimaanlage in der Küche an,turn_on
-Schalte das Licht im Bad ein,turn_on
-Mach die Steckdose im Flur an,turn_on
-Schalte die Klimaanlage im Bad ein,turn_on
-Schalte die Heizung in der Küche ein,turn_on
-Mach die Lampen im Wohnzimmer an,turn_on
-Aktiviere das Licht im Schlafzimmer,turn_on
-Schalte die Klimaanlage im Wohnzimmer auf Kühlung,turn_on
-Mach die Steckdose im Wohnzimmer aktiv,turn_on
-Starte die Klimaanlage im Bad,turn_on
-Nimm die Heizung im Wohnzimmer in Betrieb,turn_on
-Mach die Beleuchtung in der Küche an,turn_on
-Schalte die Heizung im Flur ein,turn_on
-Aktiviere die Klimaanlage im Wohnzimmer,turn_on
-Mach das Licht im Wohnzimmer aus,turn_off
-Schalte die Heizung im Schlafzimmer aus,turn_off
-Mach die Steckdose in der Küche aus,turn_off
-Schalte die Klimaanlage im Wohnzimmer aus,turn_off
-Mach das Licht im Schlafzimmer aus,turn_off
-Schalte die Heizung im Wohnzimmer ab,turn_off
-Mach das Licht in der Küche aus,turn_off
-Schalte die Heizung im Bad aus,turn_off
-Deaktiviere die Steckdose im Wohnzimmer,turn_off
-Mach die Steckdose im Bad aus,turn_off
-Stoppe die Klimaanlage im Schlafzimmer,turn_off
-Mach die Klimaanlage in der Küche aus,turn_off
-Schalte das Licht im Bad aus,turn_off
-Mach die Steckdose im Flur aus,turn_off
-Schalte die Klimaanlage im Bad ab,turn_off
-Schalte die Heizung in der Küche ab,turn_off
-Mach die Lampen im Wohnzimmer aus,turn_off
-Deaktiviere das Licht im Schlafzimmer,turn_off
-Schalte die Klimaanlage im Wohnzimmer komplett aus,turn_off
-Mach die Steckdose im Wohnzimmer aus,turn_off
-Stoppe die Klimaanlage im Bad,turn_off
-Nimm die Heizung im Wohnzimmer außer Betrieb,turn_off
-Mach die Beleuchtung in der Küche aus,turn_off
-Schalte die Heizung im Flur ab,turn_off
-Deaktiviere die Klimaanlage im Wohnzimmer,turn_off
+Mach das Licht im Wohnzimmer an.,turn_on
+Schalte die Lampe im Flur ein.,turn_on
+Mach die Küchenlampe bitte an.,turn_on
+Schalte das Deckenlicht im Schlafzimmer ein.,turn_on
+Lass das Licht im Bad angehen.,turn_on
+Mach die Wohnzimmerlampen an.,turn_on
+Schalte das Licht über dem Tisch ein.,turn_on
+Die Flurlampe soll angehen.,turn_on
+Mach die Schrankbeleuchtung an.,turn_on
+Aktiviere die Balkontlampe.,turn_on
+Schalte die Arbeitszimmerlampe ein.,turn_on
+Licht an der Treppe bitte an.,turn_on
+Mach die Nachttischlampe an.,turn_on
+Schalte die Lampe im Gästezimmer ein.,turn_on
+Mach die Bettlampe an.,turn_on
+Schalte die Steckdose im Wohnzimmer ein.,turn_on
+Aktiviere die Steckdose in der Küche.,turn_on
+Mach die Steckdose im Büro an.,turn_on
+Steckdose im Flur bitte aktivieren.,turn_on
+Schalte das Relais im Keller ein.,turn_on
+Aktiviere die Gartensteckdose.,turn_on
+Schalte die Wandsteckdose ein.,turn_on
+Die Steckdose am Fenster soll an sein.,turn_on
+Schalte die Steckdose beim Schreibtisch ein.,turn_on
+Mach die Außensteckdose an.,turn_on
+Mach das Licht im Wohnzimmer aus.,turn_off
+Schalte die Lampe im Flur aus.,turn_off
+Mach die Küchenlampe aus.,turn_off
+Schalte das Deckenlicht im Schlafzimmer aus.,turn_off
+Licht im Bad bitte ausmachen.,turn_off
+Schalte die Wohnzimmerlampen aus.,turn_off
+Mach das Licht über dem Tisch aus.,turn_off
+Die Flurlampe soll ausgehen.,turn_off
+Mach die Schrankbeleuchtung aus.,turn_off
+Schalte die Balkonlampe aus.,turn_off
+Mach die Arbeitszimmerlampe aus.,turn_off
+Licht an der Treppe aus.,turn_off
+Schalte die Nachttischlampe ab.,turn_off
+Lampe im Gästezimmer aus.,turn_off
+Mach die Bettlampe aus.,turn_off
+Schalte die Steckdose im Wohnzimmer aus.,turn_off
+Deaktiviere die Steckdose in der Küche.,turn_off
+Mach die Steckdose im Büro aus.,turn_off
+Steckdose im Flur bitte deaktivieren.,turn_off
+Schalte das Relais im Keller aus.,turn_off
+Deaktiviere die Gartensteckdose.,turn_off
+Schalte die Wandsteckdose ab.,turn_off
+Mach die Steckdose am Fenster aus.,turn_off
+Schalte die Schreibtischsteckdose aus.,turn_off
+Deaktiviere die Außensteckdose.,turn_off
+Schalte das Licht im Wohnzimmer um.,toggle
+Wechsle den Zustand der Lampe im Flur.,toggle
+Schalte die Küchenlampe um.,toggle
+Deckenlicht im Schlafzimmer umschalten.,toggle
+Licht im Bad toggeln.,toggle
+Wohnzimmerlampen bitte umschalten.,toggle
+Lampe über dem Tisch toggeln.,toggle
+Flurlampe umschalten.,toggle
+Schrankbeleuchtung toggeln.,toggle
+Balkonlampe umschalten.,toggle
+Arbeitszimmerlampe toggeln.,toggle
+Treppenlicht umschalten.,toggle
+Nachttischlampe toggeln.,toggle
+Gästezimmerlampe umschalten.,toggle
+Bettlampe toggeln.,toggle
+Schalte die Steckdose im Wohnzimmer um.,toggle
+Steckdose in der Küche toggeln.,toggle
+Bürosteckdose umschalten.,toggle
+Steckdose im Flur umschalten.,toggle
+Relais im Keller toggeln.,toggle
+Gartensteckdose umschalten.,toggle
+Wandsteckdose toggeln.,toggle
+Steckdose am Fenster umschalten.,toggle
+Schreibtischsteckdose toggeln.,toggle
+Außensteckdose umschalten.,toggle
+Lass das Wohnzimmerlicht kurz flashen.,flash
+Die Lampe im Flur soll einmal flashen.,flash
+Küchenlampe kurz aufblitzen lassen.,flash
+Schlafzimmerlicht flashen.,flash
+Badlampe kurz blinken lassen.,flash
+Wohnzimmerlampen als Signal flashen.,flash
+Lampe über dem Tisch kurz flashen.,flash
+Flurlampe kurz blinken lassen.,flash
+Schrankbeleuchtung flashen.,flash
+Balkonlampe kurz aufblitzen.,flash
+Arbeitszimmerlicht flashen.,flash
+Treppenlicht kurz aufblitzen lassen.,flash
+Nachttischlampe kurz flashen.,flash
+Gästezimmerlampe blinken lassen.,flash
+Bettlampe kurz aufleuchten lassen.,flash
+Steckdose im Wohnzimmer kurz blinken lassen.,flash
+Steckdose in der Küche kurz flashen.,flash
+Bürosteckdose als Signal flashen.,flash
+Steckdose im Flur kurz aufblitzen.,flash
+Relais im Keller kurz blinken lassen.,flash
+Gartensteckdose kurz flashen.,flash
+Wandsteckdose aufblitzen lassen.,flash
+Steckdose am Fenster kurz flashen.,flash
+Schreibtischsteckdose kurz aufblitzen.,flash
+Außensteckdose kurz flashen.,flashs
