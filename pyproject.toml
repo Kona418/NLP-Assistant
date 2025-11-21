@@ -6,14 +6,19 @@ authors = [
     {name = "Jannes Kurzke",email = "janneskurzke@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12,<3.15"
 dependencies = [
     "pandas (>=2.3.3,<3.0.0)",
     "regex (>=2025.11.3,<2026.0.0)",
-    "openai-whisper (>=20250625,<20250626)",
     "pytest (>=9.0.1,<10.0.0)",
     "python-dotenv (>=1.2.1,<2.0.0)",
     "requests (>=2.32.5,<3.0.0)",
+    "streamlit (>=1.51.0,<2.0.0)",
+    "joblib (>=1.5.2,<2.0.0)",
+    "scikit-learn (>=1.7.2,<2.0.0)",
+    "faster-whisper (>=1.2.1,<2.0.0)",
+    "spacy (>=3.8.11,<4.0.0)",
+    "pyspellchecker (>=0.8.3,<0.9.0)",
 ]
 
 [tool.poetry]
