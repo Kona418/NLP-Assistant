@@ -6,7 +6,7 @@ authors = [
     {name = "Jannes Kurzke",email = "janneskurzke@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.12,<3.15"
+requires-python = ">=3.12,<3.15,<3.15"
 dependencies = [
     "pandas (>=2.3.3,<3.0.0)",
     "regex (>=2025.11.3,<2026.0.0)",
@@ -18,7 +18,6 @@ dependencies = [
     "scikit-learn (>=1.7.2,<2.0.0)",
     "faster-whisper (>=1.2.1,<2.0.0)",
     "spacy (>=3.8.11,<4.0.0)",
-    "pyspellchecker (>=0.8.3,<0.9.0)",
 ]
 
 [tool.poetry]
