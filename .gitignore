@@ -60,3 +60,6 @@ venv/
 
 # Python Poetry lock file
 poetry.lock
+
+
+.joblib

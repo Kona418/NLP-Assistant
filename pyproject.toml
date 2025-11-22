@@ -6,7 +6,7 @@ authors = [
     {name = "Jannes Kurzke",email = "janneskurzke@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<3.15"
 dependencies = [
     "pandas (>=2.3.3,<3.0.0)",
     "regex (>=2025.11.3,<2026.0.0)",
@@ -15,6 +15,7 @@ dependencies = [
     "python-dotenv (>=1.2.1,<2.0.0)",
     "requests (>=2.32.5,<3.0.0)",
     "stratify (>=0.4.0,<0.5.0)",
+    "spacy (>=3.8.11,<4.0.0)",
 ]
 
 [tool.poetry]
