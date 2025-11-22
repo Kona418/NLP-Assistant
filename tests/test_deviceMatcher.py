@@ -29,12 +29,12 @@ class TestDeviceMatcher:
             {"name": "Deckenlampe"},
             {"name": "Standlampe"},
             {"name": "Fernseher Steckdose"},
-            {"name": "Playstation Steckdose"}
+            {"name": "Playstation_Steckdose"}
         ]
 
     @pytest.mark.parametrize("target, expected_name", [
         ("Deckenlampe", "Deckenlampe"),
-        ("Playstation", "Playstation Steckdose"),
+        ("Playstation", "Playstation_Steckdose"),
         ("Deckenleuchte", "Deckenlampe"),
         ("Fernseher", "Fernseher Steckdose"),
     ])

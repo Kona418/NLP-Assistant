@@ -31,7 +31,8 @@ class DeviceMatcher:
         highest_similarity: float = 0.0
 
         for device in deviceList:
-            device_doc: spacy.tokens.Doc = self.nlp(device['name'].lower())
+            device_name = (device['name'].lower()).replace("-", " ").replace("_", " ")
+            device_doc: spacy.tokens.Doc = self.nlp(device_name.strip())
             similarity: float = targetDeviceName_doc.similarity(device_doc)
 
             if similarity > highest_similarity:
