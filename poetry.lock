@@ -1137,7 +1137,7 @@ name = "numpy"
 version = "2.3.5"
 description = "Fundamental package for array computing in Python"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.11"
 groups = ["main"]
 files = [
     {file = "numpy-2.3.5-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:de5672f4a7b200c15a4127042170a694d4df43c992948f5e1af57f0174beed10"},
@@ -1842,18 +1842,6 @@ files = [
 
 [package.extras]
 dev = ["build", "flake8", "mypy", "pytest", "twine"]
-
-[[package]]
-name = "pyspellchecker"
-version = "0.8.3"
-description = "Pure python spell checker based on work by Peter Norvig"
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "pyspellchecker-0.8.3-py3-none-any.whl", hash = "sha256:e993076e98b0da5a99b7cc31085c3022c77a9dc37c5e95f5cf6304b5dbb8b9d2"},
-    {file = "pyspellchecker-0.8.3.tar.gz", hash = "sha256:cb06eeafe124837f321e0d02f8e21deab713e966e28e0360319a28a089c43978"},
-]
 
 [[package]]
 name = "pytest"
@@ -3250,5 +3238,5 @@ dev = ["pytest", "setuptools"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.12,<3.15"
-content-hash = "18cb3c8b97d6e5335c9448a58519301634cedb499ab8896c669b1eee990ebe44"
+python-versions = ">=3.12,<3.15,<3.15"
+content-hash = "4b74402fe04db81e9ecc04f44dea5b0e6d2181a73ad7f5db3e709e649a55ac0f"

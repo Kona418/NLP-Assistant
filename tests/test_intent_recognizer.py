@@ -4,7 +4,7 @@ import os
 from unittest.mock import patch, MagicMock, mock_open
 
 # Import module
-from src.nlp_assistant.pipelineParts.TempIntentRecognizer import IntentRecognizer
+from src.nlp_assistant.pipelineParts.IntentRecognizer import IntentRecognizer
 
 
 @pytest.fixture
@@ -53,7 +53,7 @@ def test_predict_returns_intent_above_threshold(recognizer):
 
     # --- Act ---
     # Patch cosine_similarity in the source module
-    with patch("src.nlp_assistant.pipelineParts.TempIntentRecognizer.cosine_similarity") as mock_sim:
+    with patch("src.nlp_assistant.pipelineParts.IntentRecognizer.cosine_similarity") as mock_sim:
         mock_sim.return_value = np.array([[0.9, 0.1]])
         intent, score = recognizer.predict("Licht an")
 
@@ -75,7 +75,7 @@ def test_predict_returns_none_below_threshold(recognizer):
     recognizer.vectorizer = mock_vec
 
     # --- Act ---
-    with patch("src.nlp_assistant.pipelineParts.TempIntentRecognizer.cosine_similarity") as mock_sim:
+    with patch("src.nlp_assistant.pipelineParts.IntentRecognizer.cosine_similarity") as mock_sim:
         # Score (0.5) is lower than threshold (0.95)
         mock_sim.return_value = np.array([[0.5, 0.1]])
         intent, score = recognizer.predict("Unsinn")
@@ -108,7 +108,7 @@ def test_train_and_save_process(recognizer):
         assert recognizer.is_trained is True
         # Check if model save was triggered
         mock_dump.assert_called_once()
-        # Check if directory creation was attempted
+        # Check if directory creation was atted
         mock_mkdirs.assert_called()
 
 
