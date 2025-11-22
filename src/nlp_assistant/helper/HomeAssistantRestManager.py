@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 class HomeAssistantRestManager():
@@ -13,7 +15,7 @@ class HomeAssistantRestManager():
             "content-type": "application/json",
         }
 
-    def post_action(self, action_data: dict, device_list: dict) -> dict | None:
+    def post_action(self, action_data: dict, device_list: list) -> dict | None:
         try:
             domain: str = action_data.pop("domain")
             service: str = action_data.pop("service")
@@ -59,7 +61,7 @@ class HomeAssistantRestManager():
 
         return None
 
-    def get_device_list(self) -> dict:
+    def get_device_list(self) -> list:
         services_response: requests.Response = requests.get(f"{self.ha_base_url}/api/services", headers=self.headers)
         services_data: list = services_response.json()
 
@@ -105,4 +107,5 @@ class HomeAssistantRestManager():
                             device_dict["capabilities"]["can_set_color"] = True
 
                 final_device_list.append(device_dict)
+        print(json.dumps(obj=final_device_list, indent=4))
         return final_device_list
