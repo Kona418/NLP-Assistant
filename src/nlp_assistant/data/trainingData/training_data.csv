@@ -1,0 +1,241 @@
+sentence,intent
+Schalte das Licht an,turn_on
+Mach die Lampe an,turn_on
+Licht einschalten,turn_on
+Aktiviere die Beleuchtung,turn_on
+Fernseher an,turn_on
+Radio einschalten bitte,turn_on
+Mach den Computer an,turn_on
+Heizung aktivieren,turn_on
+Lüftung starten,turn_on
+Kaffeemaschine anmachen,turn_on
+Strom auf die Steckdose geben,turn_on
+LEDs einschalten,turn_on
+System hochfahren,turn_on
+Start den Staubsauger,turn_on
+Mach mal Musik an,turn_on
+Licht im Flur an,turn_on
+Lampe im Bad einschalten,turn_on
+Schalte die Pumpe ein,turn_on
+Monitor an,turn_on
+Lichterkette aktivieren,turn_on
+Kannst du bitte das Licht im Wohnzimmer anmachen,turn_on
+Es wäre toll wenn du die Heizung einschaltest,turn_on
+Würdest du bitte das Radio starten,turn_on
+Mach das Leselicht an,turn_on
+Mach doch bitte mal die Stehlampe an,turn_on
+Schalte jetzt sofort den Verstärker ein,turn_on
+Gib der Anlage Strom,turn_on
+Können wir den Beamer anmachen,turn_on
+Sorge dafür dass die Deckenlampe angeht,turn_on
+Bitte einmal die Außenbeleuchtung aktivieren,turn_on
+Schalte die Nachtspeicherheizung an,turn_on
+Mach die Vitrinenbeleuchtung an,turn_on
+Gib dem Drucker Saft,turn_on
+Mach mal das Deckenlicht hell,turn_on
+Lass die Gartenlampe leuchten,turn_on
+Feuer frei für die Musikanlage,turn_on
+Schalte die Notbeleuchtung ein,turn_on
+Mach die Schreibtischlampe an,turn_on
+Knips mal die Nachttischlampe an,turn_on
+Bring den Server online,turn_on
+Starte den Ventilator,turn_on
+Ich möchte das Radio anhaben,turn_on
+Kannst du den Fernseher einschalten,turn_on
+Gib Strom auf den Drucker,turn_on
+Lass die Rollläden hochfahren,turn_on
+Aktiviere die Gartenbewässerung,turn_on
+Schalte die Konsole an,turn_on
+Mach den Toaster bereit,turn_on
+Mach das Küchenlicht an,turn_on
+Erleuchte das Wohnzimmerlicht,turn_on
+Zünde die Kaminfeuer-Szene an,turn_on
+Fahr den PC hoch,turn_on
+Start das Heimkino,turn_on
+Mach die Ambientebeleuchtung an,turn_on
+Schalte die Steckdoseleiste ein,turn_on
+Mach den Lüfter an,turn_on
+Starte die Fußbodenheizung,turn_on
+Mach die Espressomaschine an,turn_on
+Aktiviere den Nachtmodus,turn_on
+Schalte das WLAN an,turn_on
+Gib Saft auf die Boxen,turn_on
+Mach mal die Glotze an,turn_on
+Starte die Playlist,turn_on
+Arbeitslicht an,turn_on
+Lass das Flutlicht an gehen,turn_on
+Bring die Garage zum Leuchten,turn_on
+Schalte den Geschirrspüler ein,turn_on
+Aktiviere das Alarmsystem,turn_on
+Mach die Nachttischlampe an,turn_on
+Dreh die Anlage auf,turn_on
+Schalte alles im Büro an,turn_on
+Starte den Motor,turn_on
+Mach den Verstärker an,turn_on
+Gib dem Router Energie,turn_on
+Lass die Lichterkette strahlen,turn_on
+Aktiviere Szene Feierabend,turn_on
+Schalte den Monitor dazu,turn_on
+Mach den Wasserkocher an,turn_on
+Start den Saugroboter jetzt,turn_on
+Fahr das System an,turn_on
+Schalte das Licht aus,turn_off
+Mach die Lampe aus,turn_off
+Licht ausschalten,turn_off
+Deaktiviere die Beleuchtung,turn_off
+Fernseher aus,turn_off
+Radio ausschalten bitte,turn_off
+Mach den Computer aus,turn_off
+Heizung deaktivieren,turn_off
+Lüftung stoppen,turn_off
+Kaffeemaschine ausmachen,turn_off
+Strom von der Steckdose nehmen,turn_off
+LEDs ausschalten,turn_off
+System herunterfahren,turn_off
+Stopp den Staubsauger,turn_off
+Mach die Musik aus,turn_off
+Licht im Flur aus,turn_off
+Lampe im Bad ausschalten,turn_off
+Schalte die Pumpe ab,turn_off
+Monitor aus,turn_off
+Lichterkette deaktivieren,turn_off
+Kannst du bitte das Licht im Schlafzimmer ausmachen,turn_off
+Es wäre nett wenn du die Heizung ausschaltest,turn_off
+Würdest du bitte das Radio beenden,turn_off
+Schalte die Deckenleuchte aus,turn_off
+Mach doch bitte mal die Stehlampe aus,turn_off
+Schalte jetzt sofort den Verstärker ab,turn_off
+Nimm dem Fernseher den Strom weg,turn_off
+Können wir den Beamer ausmachen,turn_off
+Sorge dafür dass die Deckenlampe ausgeht,turn_off
+Bitte einmal die Außenbeleuchtung deaktivieren,turn_off
+Mach das Flurlicht aus,turn_off
+Schalte die Arbeitsleuchte ab,turn_off
+Mach den Lautsprecher aus,turn_off
+Kill den Prozess am PC,turn_off
+Mach die Schreibtischlampe dunkel,turn_off
+Schluss jetzt mit der Musikanlage,turn_off
+Schalte die Spielkonsole aus,turn_off
+Schalte die Gartenpumpe aus,turn_off
+Knips die Nachttischlampe ab,turn_off
+Fahr den Server runter,turn_off
+Stopp den Ventilator,turn_off
+Mach das Radio aus,turn_off
+Kannst du den Fernseher ausschalten,turn_off
+Nimm dem Drucker den Strom,turn_off
+Lass die Rollläden runterfahren,turn_off
+Deaktiviere die Gartenbewässerung,turn_off
+Schalte die Konsole aus,turn_off
+Mach den Toaster aus,turn_off
+Schalte das Schlafzimmerlicht aus,turn_off
+Verdunkle das Wohnzimmerlicht,turn_off
+Lösche die Kaminfeuer-Szene,turn_off
+Fahr den PC runter,turn_off
+Stopp das Heimkino,turn_off
+Mach die Ambientebeleuchtung aus,turn_off
+Schalte die Steckdoseleiste ab,turn_off
+Mach den Lüfter aus,turn_off
+Stopp die Heizung,turn_off
+Mach die Espressomaschine aus,turn_off
+Deaktiviere den Nachtmodus,turn_off
+Schalte das WLAN ab,turn_off
+Nimm den Boxen den Saft,turn_off
+Mach mal die Glotze aus,turn_off
+Stoppe die Playlist,turn_off
+Schalte das Arbeitslicht aus,turn_off
+Lass das Flutlicht ausgehen,turn_off
+Licht in der Garage löschen,turn_off
+Schalte den Geschirrspüler ab,turn_off
+Deaktiviere das Alarmsystem,turn_off
+Mach die Nachttischlampe aus,turn_off
+Dreh die Anlage ab,turn_off
+Schalte alles im Büro aus,turn_off
+Beende das Programm,turn_off
+Mach die Steckdose stromlos,turn_off
+Schalte den Energiesparmodus ein,turn_off
+Lösche alle Lichter,turn_off
+Beende Szene Feierabend,turn_off
+Schalte den Monitor weg,turn_off
+Mach den Wasserkocher aus,turn_off
+Stopp den Saugroboter jetzt,turn_off
+Fahr das System runter,turn_off
+Licht umschalten,toggle
+Schalter betätigen,toggle
+Licht togglen,toggle
+Lampe umschalten,toggle
+Wechsle den Status der Lampe,toggle
+Zustand der Heizung ändern,toggle
+Schalte den Schalter um,toggle
+Heizung umschalten,toggle
+Kippschalter am Gerät betätigen,toggle
+Wechsle Licht an oder aus,toggle
+Einmal den Lüfter umschalten bitte,toggle
+Status der Anlage wechseln,toggle
+Invertiere den Zustand der Dose,toggle
+Lichtschalter drücken,toggle
+Ändere den Modus der Heizung,toggle
+Wechsle die Einstellung der Lampe,toggle
+Toggle die Lampe,toggle
+Einmal den Fernseher switchen,toggle
+Mach das Licht andersrum,toggle
+Licht an oder aus machen je nachdem,toggle
+Kannst du den Schalter einmal drücken,toggle
+Bitte ändere den Zustand der Lampe,toggle
+Wechsle mal den Status vom Licht,toggle
+Betätige den Lichtschalter für mich,toggle
+Könntest du das Gerät togglen,toggle
+Schalte die Pumpe bitte einmal um,toggle
+Ändere den Betriebszustand vom PC,toggle
+Wechsle auf den anderen Modus am Thermostat,toggle
+Mach den Lüfter mal an oder aus,toggle
+Zustandswechsel am Radio durchführen,toggle
+Drück auf den Knopf der Anlage,toggle
+Flip den Switch vom Licht,toggle
+Mach den Drucker mal andersrum,toggle
+Klick den Monitor mal um,toggle
+Einmal den Hebel der Maschine umlegen,toggle
+Wechselspiel mit dem Licht,toggle
+Änder das Licht mal,toggle
+Mach den Status vom TV zum Gegenteil,toggle
+Lass den Zustand der Lampe springen,toggle
+Switch das WLAN mal,toggle
+Ventilator umschalten,toggle
+Radio Zustand wechseln,toggle
+Fernseher togglen,toggle
+Drucker an oder aus,toggle
+Rollläden Position ändern,toggle
+Bewässerung switchen,toggle
+Konsole umschalten,toggle
+Toaster Status ändern,toggle
+Lichtschalter im Flur betätigen,toggle
+Wohnzimmerlicht wechseln,toggle
+Szene umschalten,toggle
+PC Zustand invertieren,toggle
+Heimkino togglen,toggle
+Beleuchtung switchen,toggle
+Steckdose umschalten,toggle
+Lüfter Status ändern,toggle
+Heizung an oder aus machen,toggle
+Kaffeemaschine umschalten,toggle
+Modus der Lampe wechseln,toggle
+WLAN togglen,toggle
+Boxen umschalten,toggle
+Fernseher Status ändern,toggle
+Musik an oder aus,toggle
+Arbeitslicht wechseln,toggle
+Helligkeit umschalten,toggle
+Garage Licht togglen,toggle
+Spülmaschine umschalten,toggle
+Alarm Status wechseln,toggle
+Lampe am Bett togglen,toggle
+Anlage umschalten,toggle
+Bürolicht wechseln,toggle
+Status der Lampe ändern bitte,toggle
+Strom umschalten,toggle
+Energie Status wechseln,toggle
+Lichtschalter flippen,toggle
+Szene wechseln,toggle
+Monitor umschalten,toggle
+Wasserkocher togglen,toggle
+Roboter an oder aus,toggle
+Systemstatus ändern,toggle
