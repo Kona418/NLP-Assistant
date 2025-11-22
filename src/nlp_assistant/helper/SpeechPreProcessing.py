@@ -1,6 +1,5 @@
 import dotenv
 import spacy
-from spellchecker import SpellChecker
 from faster_whisper import WhisperModel
 
 
@@ -11,7 +10,6 @@ class SpeechPreProcessing:
         self.model = WhisperModel("base", device="cpu", compute_type="int8")
         self.nlp = spacy.load("de_core_news_sm")
         self.KEYWORD = dotenv.get_key(dotenv.find_dotenv(), "KEYWORD").lower().strip()
-        self.spell = SpellChecker(language='de')
 
 
     def transcribeAudioToText(self, audio_path: str) -> str:
