@@ -4,7 +4,7 @@ import os
 from unittest.mock import patch, MagicMock, mock_open
 
 # Import module
-from src.nlp_assistant.pipelineParts.TempIntentRecognizer import IntentRecognizer
+from src.nlp_assistant.pipelineParts.IntentRecognizer import IntentRecognizer
 
 
 @pytest.fixture
