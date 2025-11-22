@@ -14,7 +14,7 @@ def main():
 
     intent_recognizer: IntentRecognizer = IntentRecognizer()
 
-    intent_recognizer.train_and_save(test_size=0.2)
+    print(intent_recognizer.predict("Ich aktiviere das Licht in der Küche sofort"))
 
 if __name__ == '__main__':
     main()
