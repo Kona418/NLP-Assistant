@@ -38,7 +38,7 @@ class DeviceMatcher:
                 highest_similarity = similarity
                 best_match = device
 
-        # Definiere einen Schwellenwert für die Ähnlichkeit
+        # Überprüfung, ob die höchste Ähnlichkeit über dem Schwellenwert liegt
         if highest_similarity >= self.SIMILARITY_THRESHOLD:
             print(f"Bestes Match für: '{targetDeviceName}' =  '{best_match['name']}' mit Ähnlichkeit {highest_similarity:.2f}")
             return best_match
