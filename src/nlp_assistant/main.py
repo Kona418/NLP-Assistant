@@ -16,13 +16,12 @@ def main():
     current_time: time = time.time()
     print("start up")
     load_dotenv()
-    user_input: str  = "Mach die Deckenlampe aus."
+    user_input: str  = "mach die Deckenlampe an."
     ha_manager: HomeAssistantRestManager = HomeAssistantRestManager(ha_bearer_token=os.getenv("HA_TOKEN"), ha_base_url="http://homeassistant.local:8123")
     ha_controller: HomeAssistantController = HomeAssistantController(ha_manager=ha_manager)
     intent_recognizer: IntentRecognizer = IntentRecognizer()
     deviceMatcher: DeviceMatcher = DeviceMatcher()
     deviceList: list = ha_controller.get_device_list()
-    intent_recognizer.load_model()
     print(time.time() - current_time)
 
     thinking_time: time = time.time()

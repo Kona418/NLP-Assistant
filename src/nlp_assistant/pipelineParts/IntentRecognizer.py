@@ -14,7 +14,7 @@ class IntentRecognizer:
     Intent recognition using TF-IDF and Cosine Similarity.
     """
 
-    def __init__(self, model_path: str = "src/nlp_assistant/data/models/intent_model.joblib",
+    def __init__(self, model_path: str = os.path.join('nlp_assistant','data', 'models', 'intent_model.joblib'),
                  debug: bool = False,
                  force_train: bool = False):
         """
@@ -27,6 +27,7 @@ class IntentRecognizer:
         """
         self.model_path: str = model_path
         self.threshold: float = 0.4
+        self.debug: bool = debug
         self.debug: bool = debug
         self.force_train: bool = force_train
 
@@ -56,6 +57,7 @@ class IntentRecognizer:
         self.training_labels: list[str] = []
         self.tfidf_matrix = None
         self.is_trained: bool = False
+        self.load_model()
 
     def _load_data_from_csv(self, csv_path: str, delimiter: str = ',') -> tuple[list[str], list[str]]:
         """
@@ -130,7 +132,7 @@ class IntentRecognizer:
         if self.debug:
             print(f"--> Model Saved Successfully")
 
-    def train_and_save(self, csv_path: str = "data/trainingData/training_data.csv", delimiter: str = ",",
+    def train_and_save(self, csv_path: str = os.path.join('src', 'nlp_assistant','data', 'trainingData', 'training_data.csv'), delimiter: str = ",",
                        test_size: float = 0.2):
         """
         Trains the model on a split, evaluates it, and saves the result.
@@ -140,6 +142,7 @@ class IntentRecognizer:
             delimiter (str): CSV delimiter.
             test_size (float): Percentage of data used for evaluation (0.0-1.0).
         """
+
         if self.debug:
             print(f"~~~~~~ Start Training With: {csv_path} ~~~~~~")
             print(f"* Loading Data")
@@ -217,6 +220,7 @@ class IntentRecognizer:
         self._save_to_disk()
 
     def load_model(self) -> bool:
+
         """
         Loads the model from the file system.
         Returns False if force_train is True or file does not exist.
@@ -225,14 +229,17 @@ class IntentRecognizer:
             bool: True if loading was successful, False otherwise.
         """
         if self.force_train:
+            self.train_and_save()
             if self.debug:
                 print("! Force train enabled. Skipping load.")
             return False
 
         if not os.path.exists(self.model_path):
-            return False
+            self.train_and_save()
 
         try:
+            if not os.path.exists(self.model_path):
+                 self.train_and_save()
             data = joblib.load(self.model_path)
             self.vectorizer = data["vectorizer"]
             self.tfidf_matrix = data["tfidf_matrix"]

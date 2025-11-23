@@ -21,8 +21,8 @@ class backend:
 
         self.ha_controller = HomeAssistantController(ha_manager=self.ha_manager)
         
-        self.intent_recognizer = IntentRecognizer()
-        self.intent_recognizer.load_model()
+        self.intent_recognizer = IntentRecognizer(debug=True)
+        # self.intent_recognizer.load_model()
     
         self.deviceMatcher = DeviceMatcher()
         self.deviceList = self.ha_controller.get_device_list()
@@ -33,11 +33,13 @@ class backend:
     def process_command(self, user_input: str) -> dict:
         print(f"Processing command: {user_input}")
 
+        print(1)
         intent = self.intent_recognizer.predict(user_input)[0]
-
+        print(2)
         raw_device_name: str = self.deviceMatcher.extractDeviceNamesFromCommands(user_input)
+        print(3)
         device_name: dict = self.deviceMatcher.findBestDeviceMatch(targetDeviceName=raw_device_name, deviceList=self.deviceList)
-
+        print(4)
         action_input: dict = {
         "domain": f"{device_name["type"]}",
         "service": f"{intent}",
