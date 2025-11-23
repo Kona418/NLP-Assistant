@@ -1,4 +1,4 @@
-from src.nlp_assistant.helper import HomeAssistantRestManager
+from nlp_assistant.helper import HomeAssistantRestManager
 
 class HomeAssistantController:
 
