@@ -87,10 +87,10 @@ class FrontendApp:
                 platzhalter_device.code(f"Erkanntes Gerät: {device_name}", language="text")
                 platzhalter_action.code(f"Auszuführende Aktion: {action_input}", language="text")
 
-                if action_input.get("success", False):
-                    platzhalter_popup.success(f"Aktion erfolgreich ausgeführt: {action_input}")
-                else:
-                    platzhalter_popup.warning(f"Aktion nicht erfolgreich ausgeführt: {action_input}")
+                #if action_input.get("success", False):
+                #    platzhalter_popup.success(f"Aktion erfolgreich ausgeführt: {action_input}")
+                #else:
+                #    platzhalter_popup.warning(f"Aktion nicht erfolgreich ausgeführt: {action_input}")
 
                 progress.progress(100)
 

@@ -47,3 +47,5 @@ class backend:
         }
 
         self.ha_controller.post_action(action_input)
+
+        return intent, raw_device_name, device_name, action_input
