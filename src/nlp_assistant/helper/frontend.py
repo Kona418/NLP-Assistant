@@ -2,91 +2,106 @@ import time
 import streamlit as st
 import os
 
-from nlp_assistant.backend import AssistantEngine
+
+from nlp_assistant.backend import backend 
 from nlp_assistant.helper.SpeechPreProcessing import SpeechPreProcessing
 
-# Importiere das neue Backend (Pfad ggf. anpassen, je nach Ordnerstruktur)
-
 AUDIO_FOLDER = "src/nlp_assistant/data/audio/" 
-# Sicherstellen, dass der Ordner existiert
-os.makedirs(AUDIO_FOLDER, exist_ok=True)
+FILENAME = f"Aufnahme_{int(time.time())}.mp3"
+FILEPATH = AUDIO_FOLDER + FILENAME
 
-# ---------------------------------------------------------
-# Backend Initialisierung (Cached!)
-# ---------------------------------------------------------
-@st.cache_resource
-def get_assistant_engine():
-    """Lädt das NLP Backend nur einmalig beim Start."""
-    return AssistantEngine()
+class FrontendApp:
+    def __init__(self):
+        # Initialisierung des Backend-Managers
+        self.backend_manager = backend()
 
-try:
-    engine = get_assistant_engine()
-except Exception as e:
-    st.error(f"Fehler beim Laden des Backends: {e}")
-    st.stop()
+    def run(self):
+        ####################################
+        # Config
+        ####################################
 
-# ---------------------------------------------------------
-# UI Config
-# ---------------------------------------------------------
-st.set_page_config(
-    page_title="HomeAssistant Communication",
-    page_icon="🎙️",
-    layout="centered"
-)
+        st.set_page_config(
+            page_title="HomeAssistant Communication",
+            page_icon="🎙",
+            layout="centered"
+        )
 
-st.title("HomeAssistant NLP Controller")
+        st.title("HomeAssistant Communication")
 
-# ---------------------------------------------------------
-# Audio Input
-# ---------------------------------------------------------
-audio_bytes = st.audio_input(
-    label="Drücke den Mikrofon Button, um die Aufnahme zu starten:",
-    sample_rate=16000 
-)
 
-transkript_container = st.container()
-status_container = st.empty()
+        ####################################
+        # Webinhalt 
+        ####################################
 
-# ---------------------------------------------------------
-# Verarbeitungs-Logik
-# ---------------------------------------------------------
-if audio_bytes is not None:
-    FILENAME = f"Aufnahme_{int(time.time())}.wav" # WAV ist oft sicherer für rohe Audio-Bytes
-    FILEPATH = os.path.join(AUDIO_FOLDER, FILENAME)
+        audio_bytes = st.audio_input(
+            label="Drücke den Mikrofon Button, um die Aufnahme zu starten:",
+            sample_rate=16000 
+        )
 
-    # 1. Datei speichern
-    with open(FILEPATH, "wb") as f:
-        f.write(audio_bytes.read())
-    
-    status_container.info("Verarbeite Audio...")
+        transkriptPlatzhalter = st.empty()
+        relevanterSatzPlatzhalter = st.empty()
+        intentPlatzhalter = st.empty()
+        devicePlatzhalter = st.empty()
 
-    # 2. Transkription (Whisper o.ä.)
-    try:
-        pre_processor = SpeechPreProcessing()
-        # Annahme: transcribeAudioToText akzeptiert Pfad
-        full_transkript = pre_processor.transcribeAudioToText(str(FILEPATH))
-        
-        # Extraktion des relevanten Satzes (falls nötig)
-        relevanter_satz = pre_processor.extractTheRelevantSentence(full_transkript)
-        
-        transkript_container.success(f"🗣️ Erkannt: **{relevanter_satz}**")
 
-        # 3. An das Backend senden (Die "Magie")
-        with st.spinner("Sende Befehl an Home Assistant..."):
-            result = engine.process_command(relevanter_satz)
+        st.divider()
 
-        # 4. Ergebnis anzeigen
-        if result["status"] == "success":
-            st.balloons()
-            st.success(f"✅ Aktion ausgeführt!")
-            st.json(result) # Zeigt Details wie Intent, Device und Zeit an
-        else:
-            st.error(f"❌ Fehler: {result.get('message', 'Unbekannter Fehler')}")
+        popUpMeldungenPlatzhalter = st.empty()
 
-    except Exception as e:
-        st.error(f"Ein Fehler ist aufgetreten: {e}")
+        ####################################
+        # Logik 
+        ####################################
 
-    finally:
-        # Aufräumen
-        if os.path.exists(FILEPATH):
-            os.unlink(FILEPATH)
+        if audio_bytes is not None:
+            
+            ## Temporäre Audio-Datei speichern
+            # Stelle sicher, dass der Audio-Ordner existiert
+            os.makedirs(AUDIO_FOLDER, exist_ok=True)
+            with open(FILEPATH, "wb") as f:
+                f.write(audio_bytes.read())
+            popUpMeldungenPlatzhalter.success("Audioaufnahme erfolgreich gespeichert!")
+
+            # --- VORVERARBEITUNG: Transkription und Extraktion des relevanten Satzes ---
+   
+            try:
+                # Transkription
+                transkript = SpeechPreProcessing().transcribeAudioToText(str(FILEPATH))
+                transkriptPlatzhalter.code(f"Transkript: {transkript}", language="text")
+                popUpMeldungenPlatzhalter.success("Audioaufnahme erfolgreich transkribiert!")
+                
+                # Extraktion des relevanten Satzes
+                relevanterSatz = SpeechPreProcessing().extractTheRelevantSentence(transkript)
+                relevanterSatzPlatzhalter.code(f"Relevanter Satz: {relevanterSatz}", language="text")
+                popUpMeldungenPlatzhalter.success("Befehl erfolgreich extrahiert!")
+                
+            except Exception as e:
+                popUpMeldungenPlatzhalter.error(f"Fehler in der Spracherkennung/Extraktion: {e}")
+                relevanterSatz = None
+
+            
+            # --- BACKEND-VERARBEITUNG: Intent, Gerät und Aktion ausführen ---
+            if relevanterSatz:
+                try:
+                    # Der BackendManager übernimmt nun die Logik aus der alten 'backend' Klasse
+                    ergebnis = self.backend_manager.process_command(relevanterSatz)
+                    
+                    # Ausgabe der extrahierten Informationen
+                    intentPlatzhalter.code(f"Erkannter Intent (Service): {ergebnis.get('service', 'Nicht erkannt')}", language="text")
+                    devicePlatzhalter.code(f"Erkanntes Gerät (Name/Typ): {ergebnis.get('name', 'Nicht erkannt')} / {ergebnis.get('domain', 'Nicht erkannt')}", language="text")
+                    
+                    if ergebnis.get('success', False):
+                        popUpMeldungenPlatzhalter.success(f"Aktion erfolgreich ausgeführt: {ergebnis['message']}")
+                    else:
+                        popUpMeldungenPlatzhalter.warning(f"Aktion nicht ausgeführt: {ergebnis['message']}")
+                        
+                except Exception as e:
+                    popUpMeldungenPlatzhalter.error(f"Fehler in der Backend-Verarbeitung: {e}")
+            
+            # --- Aufräumarbeiten ---
+            if os.path.exists(str(FILEPATH)):
+                os.unlink(FILEPATH)
+ 
+
+if __name__ == "__main__":
+    app = FrontendApp()
+    app.run()
