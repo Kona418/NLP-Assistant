@@ -107,5 +107,5 @@ class HomeAssistantRestManager():
                             device_dict["capabilities"]["can_set_color"] = True
 
                 final_device_list.append(device_dict)
-        print(json.dumps(obj=final_device_list, indent=4))
+        # print(json.dumps(obj=final_device_list, indent=4))
         return final_device_list
