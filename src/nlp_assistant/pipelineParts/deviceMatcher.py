@@ -1,3 +1,4 @@
+from annotated_types import doc
 import spacy
 
 
@@ -51,29 +52,54 @@ class DeviceMatcher:
     def extractDeviceNamesFromCommands(self, command: str) -> str:
         """
         Extrahiert den DeviceName aus dem Sprachbefehl.
-
+        Strategie: Finde den grammatikalischen Kern des Objekts (egal ob NOUN oder X) und sammle alle dazugehörigen Wörter ein.
         Args:
             command (str): Der Sprachbefehl.
-        
         Returns:
             str: Der extrahierte DeviceName.
+            
         """
         doc = self.nlp(command)
-      
+        
+        # Definiere relevante Abhängigkeitsbeziehungen
+        target_deps: list[str] = ["oa", "obj", "dobj", "sb", "nsubj", "pd"]
+        
+        candidates: list[tuple[int, str]] = []
+
         for token in doc:
-            # 1. Direktes Device über relevante Dependencies
-            if token.dep_ in ["oa", "sb", "obj", "dobj", "pd"] and token.pos_ in ["NOUN", "PROPN"]:
-                return token.text
+            # 1. Finde Tokens mit den relevanten Dependencies
+            if token.dep_ in target_deps:
+                
+                # 2. Gehe den Baum runter und sammle relevante Wörter ein
+                relevant_words: list[str] = []
+                
+                # Über den Subtree des gefundenen Tokens iterieren
+                for sub_token in token.subtree:
+                    
+                    # Filtere nur relevante Wortarten heraus -> Keine Artikel, Pronomen, Satzzeichen, Präpositionen
+                    if sub_token.pos_ not in ["DET", "PRON", "PUNCT", "ADP"]:
+                        
+                        # Präpositionen ausschließen -> Ort, Zeit
+                        if sub_token.head.pos_ == "ADP":
+                            continue
+                            
+                        relevant_words.append(sub_token.text)
 
-            # 2. Device als Head eines ag-Attributes
-            if token.dep_ == "ag" and token.head.pos_ in ["NOUN", "PROPN"]:
-                return token.head.text
-            
-            # 3. Fallback: NOUN/PROPN, der/das/die vorhergehendem Verb folgt
-            if token.pos_ in ["NOUN", "PROPN"] and token.i > 0:
-                prev = doc[token.i - 1]
-                if prev.pos_ == "DET" or prev.pos_ == "VERB" or prev.dep_ in ["ROOT"]:
-                    return token.text
+                if relevant_words:
+                    # Die relevanten Wörter zu einem String zusammenfügen
+                    phrase: str = " ".join(relevant_words)
+                    
+                    # Setze die Priorität basierend auf der Dependency des Tokens
+                    if token.dep_ in ["oa", "obj", "dobj"]:
+                        priority = 0
+                    else:
+                        priority = 1
 
-        print("Kein Device gefunden.")
+                    candidates.append((priority, phrase))
+
+        # Sortiere und gebe den besten Treffer zurück
+        if candidates:
+            candidates.sort(key=lambda x: x[0])
+            return candidates[0][1]
+
         return ""
