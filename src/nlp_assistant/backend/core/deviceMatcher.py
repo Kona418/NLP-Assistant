@@ -27,13 +27,13 @@ class DeviceMatcher:
             dict | None: Das beste passende Gerät oder None, wenn kein passendes Gerät gefunden wurde.
         """
 
-        targetDeviceName_doc: spacy.tokens.Doc = self.nlp(targetDeviceName.lower())
+        targetDeviceName_doc: spacy.tokens.Doc = self.nlp(targetDeviceName.lower().replace("-", " ").replace("_", " ").strip())
         best_match: dict | None = None
         highest_similarity: float = 0.0
 
         for device in deviceList:
-            device_name = (device['name'].lower()).replace("-", " ").replace("_", " ")
-            device_doc: spacy.tokens.Doc = self.nlp(device_name.strip())
+            device_name = (device['name'].lower().replace("-", " ").replace("_", " ").strip())
+            device_doc: spacy.tokens.Doc = self.nlp(device_name)
             similarity: float = targetDeviceName_doc.similarity(device_doc)
 
             if similarity > highest_similarity:
