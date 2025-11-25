@@ -3,8 +3,6 @@ import time
 import streamlit as st
 import os
 
-from torch import device
-
 from nlp_assistant.backend.backendController import backendController
 from nlp_assistant.backend.audio.SpeechPreProcessing import SpeechPreProcessing
 
@@ -147,7 +145,7 @@ class FrontendApp:
 
         # Ergebnisse aus Session State laden
         results = st.session_state.get("results", {})
-        
+
         # Transkript anzeigen
         if "transkript" in results:
             st.code(f"Transkript: {results['transkript']}", language="text")
