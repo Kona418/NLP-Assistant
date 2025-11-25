@@ -38,76 +38,76 @@ class FrontendApp:
         if "audio_key_id" not in st.session_state:
             st.session_state.audio_key_id = 0
 
-    def process_data(self) -> None  :
+    def process_data(self, ladeIcon_placeholder) -> None  :
         """
         Führt die gesamte Verarbeitung des Inputs aus.
 
         """
-        with st.spinner('Verarbeite Eingabe... Bitte warten Sie einen Moment ⏳'):
-            # Wir greifen auf die initialisierten Dienste zu
-            backend_manager = self.services.backend_manager
-            speech = self.services.speech
-
-            # --- IDs/Keys generieren zum Zurücksetzen des Audio-Widgets ---
-            current_audio_key = f"audio_input_{st.session_state.audio_key_id}"
-                
-            # User Input aus Session State laden
-            user_input_text = st.session_state.get("text_input_key", "")
-            audio_bytes = st.session_state.get(current_audio_key, None)
-                
-            relevanter_satz = None
-            st.session_state.results = {}
-                
-            # --- Audio Input ---
-            if audio_bytes is not None:
-                # Speichere die Audioaufnahme temporär ab
-                os.makedirs(AUDIO_FOLDER, exist_ok=True)
-                filepath = os.path.join(AUDIO_FOLDER, f"Aufnahme_{int(time.time())}.mp3")
-
-                try:
-                    # Öffne die Datei und schreibe die Bytes hinein
-                    with open(filepath, "wb") as f:
-                        f.write(audio_bytes.read())
-                        
-                    # Verarbeite die Audiodatei
-                    transkript = speech.transcribeAudioToText(filepath)
-                    st.session_state.results["transkript"] = transkript
+        with ladeIcon_placeholder.container():
+            with st.spinner('Verarbeite die Eingabe... Bitte warten Sie einen Moment.'):
+                # Wir greifen auf die initialisierten Dienste zu
+                backend_manager = self.services.backend_manager
+                speech = self.services.speech
+                # --- IDs/Keys generieren zum Zurücksetzen des Audio-Widgets ---
+                current_audio_key = f"audio_input_{st.session_state.audio_key_id}"
                     
-                    # Extrahiere den relevanten Satz aus dem Transkript
-                    relevanter_satz = speech.extractTheRelevantSentence(transkript)
+                # User Input aus Session State laden
+                user_input_text = st.session_state.get("text_input_key", "")
+                audio_bytes = st.session_state.get(current_audio_key, None)
+                    
+                relevanter_satz = None
+                st.session_state.results = {}
+                    
+                # --- Audio Input ---
+                if audio_bytes is not None:
+                    # Speichere die Audioaufnahme temporär ab
+                    os.makedirs(AUDIO_FOLDER, exist_ok=True)
+                    filepath = os.path.join(AUDIO_FOLDER, f"Aufnahme_{int(time.time())}.mp3")
+
+                    try:
+                        # Öffne die Datei und schreibe die Bytes hinein
+                        with open(filepath, "wb") as f:
+                            f.write(audio_bytes.read())
+                            
+                        # Verarbeite die Audiodatei
+                        transkript = speech.transcribeAudioToText(filepath)
+                        st.session_state.results["transkript"] = transkript
+                        
+                        # Extrahiere den relevanten Satz aus dem Transkript
+                        relevanter_satz = speech.extractTheRelevantSentence(transkript)
+                        st.session_state.results["relevanter_satz"] = relevanter_satz
+                        st.session_state.results["audio_success"] = True
+
+                    except Exception as e:
+                        st.session_state.results["error"] = f"Fehler in der Spracherkennung: {e}"
+
+                    finally:
+                        if os.path.exists(filepath):
+                            os.unlink(filepath)
+
+                # --- Text Input ---
+                elif user_input_text.strip() != "":
+                    relevanter_satz = user_input_text.strip()
                     st.session_state.results["relevanter_satz"] = relevanter_satz
-                    st.session_state.results["audio_success"] = True
+                    
 
-                except Exception as e:
-                    st.session_state.results["error"] = f"Fehler in der Spracherkennung: {e}"
+                # --- Backend Verarbeitung des relevanten Satzes ---
+                if relevanter_satz:
+                    try:
+                        intent, raw_device_name, device_name, action_input = backend_manager.process_command(
+                            relevanter_satz
+                        )
+                        st.session_state.results["intent"] = intent
+                        st.session_state.results["device_name"] = device_name
+                        st.session_state.results["action_input"] = action_input
+                        st.session_state.results["backend_success"] = action_input.get("success", False)
 
-                finally:
-                    if os.path.exists(filepath):
-                        os.unlink(filepath)
-
-            # --- Text Input ---
-            elif user_input_text.strip() != "":
-                relevanter_satz = user_input_text.strip()
-                st.session_state.results["relevanter_satz"] = relevanter_satz
-                
-
-            # --- Backend Verarbeitung des relevanten Satzes ---
-            if relevanter_satz:
-                try:
-                    intent, raw_device_name, device_name, action_input = backend_manager.process_command(
-                        relevanter_satz
-                    )
-                    st.session_state.results["intent"] = intent
-                    st.session_state.results["device_name"] = device_name
-                    st.session_state.results["action_input"] = action_input
-                    st.session_state.results["backend_success"] = action_input.get("success", False)
-
-                except Exception as e:
-                    st.session_state.results["backend_error"] = f"Fehler im Backend: {e}"
-                
-            # --- Reset des Audio und Text Inputs ---
-            st.session_state["text_input_key"] = ""
-            st.session_state.audio_key_id += 1
+                    except Exception as e:
+                        st.session_state.results["backend_error"] = f"Fehler im Backend: {e}"
+                    
+                # --- Reset des Audio und Text Inputs ---
+                st.session_state["text_input_key"] = ""
+                st.session_state.audio_key_id += 1
                 
 
     def run(self) -> None:
@@ -134,8 +134,10 @@ class FrontendApp:
             key=dynamic_key
         )
 
+        ladeIcon_placeholder = st.empty()
+
         # Run Button
-        st.button("Ausführen", on_click=self.process_data, type="primary", use_container_width=True)
+        st.button("Ausführen", on_click=self.process_data, type="primary", use_container_width=True, args=[ladeIcon_placeholder])
 
         #################################################################################
         # ERGEBNISSE ANZEIGEN
