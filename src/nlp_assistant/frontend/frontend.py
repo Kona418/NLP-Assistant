@@ -1,140 +1,187 @@
+import json
 import time
 import streamlit as st
 import os
 
+from torch import device
+
 from nlp_assistant.backend.backendController import backendController
 from nlp_assistant.backend.audio.SpeechPreProcessing import SpeechPreProcessing
 
-
 AUDIO_FOLDER = "src/nlp_assistant/data/audio/"
 
-
-class FrontendApp:
-    def __init__(self) -> None:
+# =========================================================================
+# Backend Services - Initialisierung (Einmalig)
+# =========================================================================
+@st.cache_resource
+class BackendServices:
+    """
+    Diese Klasse initialisiert rechenintensive Objekte nur EINMAL 
+    (Cache Resource) und gibt sie bei jedem Rerun wieder.
+    """
+    def __init__(self):
         self.backend_manager = backendController()
         self.speech = SpeechPreProcessing()
 
+# =========================================================================
+# Frontend Klasse
+# =========================================================================
+class FrontendApp:
+    def __init__(self) -> None:
+
+        # Initialisiere Backend Services
+        self.services = BackendServices()
+        
+        # Initialisiere Ergebnisse im Session State
+        if "results" not in st.session_state:
+            st.session_state.results = {}
+        
+        # Initialisiere einen Zähler für den Audio-Widget-Key -> Für Reset des Audio-Widgets
+        if "audio_key_id" not in st.session_state:
+            st.session_state.audio_key_id = 0
+
+    def process_data(self) -> None  :
+        """
+        Führt die gesamte Verarbeitung des Inputs aus.
+
+        """
+        with st.spinner('Verarbeite Eingabe... Bitte warten Sie einen Moment ⏳'):
+            # Wir greifen auf die initialisierten Dienste zu
+            backend_manager = self.services.backend_manager
+            speech = self.services.speech
+
+            # --- IDs/Keys generieren zum Zurücksetzen des Audio-Widgets ---
+            current_audio_key = f"audio_input_{st.session_state.audio_key_id}"
+                
+            # User Input aus Session State laden
+            user_input_text = st.session_state.get("text_input_key", "")
+            audio_bytes = st.session_state.get(current_audio_key, None)
+                
+            relevanter_satz = None
+            st.session_state.results = {}
+                
+            # --- Audio Input ---
+            if audio_bytes is not None:
+                # Speichere die Audioaufnahme temporär ab
+                os.makedirs(AUDIO_FOLDER, exist_ok=True)
+                filepath = os.path.join(AUDIO_FOLDER, f"Aufnahme_{int(time.time())}.mp3")
+
+                try:
+                    # Öffne die Datei und schreibe die Bytes hinein
+                    with open(filepath, "wb") as f:
+                        f.write(audio_bytes.read())
+                        
+                    # Verarbeite die Audiodatei
+                    transkript = speech.transcribeAudioToText(filepath)
+                    st.session_state.results["transkript"] = transkript
+                    
+                    # Extrahiere den relevanten Satz aus dem Transkript
+                    relevanter_satz = speech.extractTheRelevantSentence(transkript)
+                    st.session_state.results["relevanter_satz"] = relevanter_satz
+                    st.session_state.results["audio_success"] = True
+
+                except Exception as e:
+                    st.session_state.results["error"] = f"Fehler in der Spracherkennung: {e}"
+
+                finally:
+                    if os.path.exists(filepath):
+                        os.unlink(filepath)
+
+            # --- Text Input ---
+            elif user_input_text.strip() != "":
+                relevanter_satz = user_input_text.strip()
+                st.session_state.results["relevanter_satz"] = relevanter_satz
+                
+
+            # --- Backend Verarbeitung des relevanten Satzes ---
+            if relevanter_satz:
+                try:
+                    intent, raw_device_name, device_name, action_input = backend_manager.process_command(
+                        relevanter_satz
+                    )
+                    st.session_state.results["intent"] = intent
+                    st.session_state.results["device_name"] = device_name
+                    st.session_state.results["action_input"] = action_input
+                    st.session_state.results["backend_success"] = action_input.get("success", False)
+
+                except Exception as e:
+                    st.session_state.results["backend_error"] = f"Fehler im Backend: {e}"
+                
+            # --- Reset des Audio und Text Inputs ---
+            st.session_state["text_input_key"] = ""
+            st.session_state.audio_key_id += 1
+                
 
     def run(self) -> None:
-        ######################################
-        # Seitenkonfiguration 
-        ######################################
-        st.set_page_config(
-            page_title="HomeAssistant Communication",
-            page_icon="🎙️",
-            layout="centered"
-        )
-
+        #################################################################################
+        # STREAMLIT CONFIG 
+        #################################################################################
+        st.set_page_config(page_title="HomeAssistant Communication", page_icon="🎙️", layout="centered")
         st.title("HomeAssistant Communication")
+    
 
-        ######################################
-        # User Input 
-        ######################################
-        st.subheader("User Input")
+        #################################################################################
+        # USER INPUT
+        #################################################################################
+        
+        # Text Input
+        st.text_input("Gebe hier bitte dein Befehl ein", key="text_input_key")
 
-        # Textinput
-        user_input = st.text_input("Gebe hier bitte dein Befehl ein")
-
-        # Audioaufnahme
-        audio_bytes = st.audio_input(
+        # Audio Input mit dynamischem session key
+        dynamic_key = f"audio_input_{st.session_state.audio_key_id}"
+        
+        st.audio_input(
             label="Drücke den Mikrofon Button, um die Aufnahme zu starten:",
-            sample_rate=16000
+            sample_rate=16000,
+            key=dynamic_key
         )
 
+        # Run Button
+        st.button("Ausführen", on_click=self.process_data, type="primary", use_container_width=True)
 
-        ######################################
-        # Verarbeitung und Ausgabe 
-        ######################################
+        #################################################################################
+        # ERGEBNISSE ANZEIGEN
+        #################################################################################
+        st.divider()
         st.subheader("Ergebnisse")
 
-        progress = st.empty()
-
-        platzhalter_transkript = st.empty()
-        platzhalter_relevanter_satz = st.empty()
-        platzhalter_intent = st.empty()
-        platzhalter_device = st.empty()
-        platzhalter_action = st.empty()
-
-        st.divider()
-        platzhalter_popup = st.empty()
-
-        def clearPlatzhalter():
-            progress.empty()
-            platzhalter_transkript.empty()
-            platzhalter_relevanter_satz.empty()
-            platzhalter_intent.empty()
-            platzhalter_device.empty()
-            platzhalter_action.empty()
-            platzhalter_popup.empty()
-
-        relevanter_satz = None
-
-        ###########################################
-        # Audioinput
-        ###########################################
-        if audio_bytes is not None:
-
-            clearPlatzhalter()
-            os.makedirs(AUDIO_FOLDER, exist_ok=True)
-            filepath = os.path.join(AUDIO_FOLDER, f"Aufnahme_{int(time.time())}.mp3")
-
-            with open(filepath, "wb") as f:
-                f.write(audio_bytes.read())
-
-            platzhalter_popup.success("Audioaufnahme erfolgreich gespeichert!")
-            progress.progress(10)
-
-            try:
-                transkript = self.speech.transcribeAudioToText(filepath)
-                platzhalter_transkript.code(f"Transkript: {transkript}", language="text")
-                platzhalter_popup.success("Audioaufnahme erfolgreich transkribiert!")
-                progress.progress(25)
-
-                relevanter_satz = self.speech.extractTheRelevantSentence(transkript)
-                platzhalter_relevanter_satz.code(f"Relevanter Satz: {relevanter_satz}", language="text")
-                platzhalter_popup.success("Befehl erfolgreich extrahiert!")
-                progress.progress(50)
-
-            except Exception as e:
-                platzhalter_popup.error(f"Fehler in der Spracherkennung oder Satzextraktion: {e}")
-
-            if os.path.exists(filepath):
-                os.unlink(filepath)
-
+        # Ergebnisse aus Session State laden
+        results = st.session_state.get("results", {})
         
-        ###########################################
-        # Textinput
-        ###########################################
-        elif user_input.strip() != "":
-            clearPlatzhalter()
-            relevanter_satz = user_input.strip()
-            progress.progress(20)
+        # Transkript anzeigen
+        if "transkript" in results:
+            st.code(f"Transkript: {results['transkript']}", language="text")
+
+        # Befehl anzeigen
+        if "relevanter_satz" in results:
+            st.code(f"Befehl: {results['relevanter_satz']}", language="text")
+            
+        if "intent" in results:
+            # Erkanntes Gerät
+            device_data = json.dumps(results.get("device_name", {}), indent=4)
+            st.code(f"Erkanntes Gerät: \n{device_data}", language="json")
+
+            # Backend Aktion
+            action_data = json.dumps(results.get("action_input", {}), indent=4)
+            st.code(f"Aktion: \n{action_data}", language="json")
+
+            # Erfolgs- und Fehlermeldungen der Backend Aktion
+            if results.get("backend_success"):
+                st.success(f"Aktion erfolgreich ausgeführt.")
+            else:
+                st.warning(f"Aktion nicht erfolgreich ausgeführt.")
         
 
-        ###########################################
-        # BACKEND
-        ###########################################
-        if relevanter_satz:
-            try:
-                intent, raw_device_name, device_name, action_input = self.backend_manager.process_command(
-                    relevanter_satz
-                )
-                progress.progress(75)
-
-                platzhalter_intent.code(f"Erkannter Intent: {intent}", language="text")
-                platzhalter_device.code(f"Erkanntes Gerät: {device_name}", language="text")
-                platzhalter_action.code(f"Auszuführende Aktion: {action_input}", language="text")
-
-                if action_input.get("success", False):
-                    platzhalter_popup.success(f"Aktion erfolgreich ausgeführt: {action_input}")
-                else:
-                    platzhalter_popup.warning(f"Aktion nicht erfolgreich ausgeführt: {action_input}")
-
-                progress.progress(100)
-
-            except Exception as e:
-                platzhalter_popup.error(f"Fehler in der Backend-Verarbeitung: {e}")
+        # Erfolgs- und Fehlermeldungen
+        if results.get("audio_success"):
+            st.success("Audioaufnahme erfolgreich verarbeitet!")
         
+        if "error" in results:
+            st.error(results["error"])
+        
+        if "backend_error" in results:
+            st.error(results["backend_error"])
+
 
 if __name__ == "__main__":
     FrontendApp().run()
