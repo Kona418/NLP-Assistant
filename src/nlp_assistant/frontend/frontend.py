@@ -157,13 +157,14 @@ class FrontendApp:
             st.code(f"Befehl: {results['relevanter_satz']}", language="text")
             
         if "intent" in results:
+            # Backend Aktion
+            action_data = json.dumps(results.get("action_input", {}), indent=4)
+            st.code(f"Aktion: \n{action_data}", language="json")
+
             # Erkanntes Gerät
             device_data = json.dumps(results.get("device_name", {}), indent=4)
             st.code(f"Erkanntes Gerät: \n{device_data}", language="json")
 
-            # Backend Aktion
-            action_data = json.dumps(results.get("action_input", {}), indent=4)
-            st.code(f"Aktion: \n{action_data}", language="json")
 
             # Erfolgs- und Fehlermeldungen der Backend Aktion
             if results.get("backend_success"):
@@ -172,10 +173,6 @@ class FrontendApp:
                 st.warning(f"Aktion nicht erfolgreich ausgeführt.")
         
 
-        # Erfolgs- und Fehlermeldungen
-        if results.get("audio_success"):
-            st.success("Audioaufnahme erfolgreich verarbeitet!")
-        
         if "error" in results:
             st.error(results["error"])
         

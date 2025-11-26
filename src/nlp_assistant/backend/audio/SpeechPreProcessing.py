@@ -1,15 +1,28 @@
 import dotenv
 import spacy
 from faster_whisper import WhisperModel
-
+from spacy.matcher import PhraseMatcher
+from spacy.tokens import Span
 
 class SpeechPreProcessing:
-    def __init__(self):
-        dotenv.load_dotenv()
-
+    def __init__(self) -> None:
+        # Transkriptionsmodell initialisieren
         self.model = WhisperModel("turbo", device="cpu", compute_type="int8")
+        
+        # Satzextraktion initialisieren         
         self.nlp = spacy.load("de_core_news_sm")
+        self.matcher = PhraseMatcher(self.nlp.vocab, attr="LOWER")
+        
+        # Laden des Keywords aus der .env Datei
+        dotenv.load_dotenv()
         self.KEYWORD = dotenv.get_key(dotenv.find_dotenv(), "KEYWORD").lower().strip()
+
+        # Keyword vorbereiten
+        cleaned_keyword = self.KEYWORD.lower().strip()
+        keyword_doc = self.nlp(cleaned_keyword, disable=["tagger", "parser", "ner"])
+
+        # Das Schlüsselwort dem Matcher hinzufügen
+        self.matcher.add("COMMAND_KEYWORD", [keyword_doc])
 
 
     def transcribeAudioToText(self, audio_path: str) -> str:
@@ -26,7 +39,6 @@ class SpeechPreProcessing:
 
                 text_segments = [segment.text for segment in segments]
                 full_text = "".join(text_segments).strip()
-                
                 return full_text
             
             except Exception as e:
@@ -46,38 +58,45 @@ class SpeechPreProcessing:
         try:
             # NLP-Dokument erstellen und Sätze extrahieren
             doc = self.nlp(transcript)
-            sentences = list(doc.sents)
+            sentences: list[Span] = list(doc.sents)
 
+            for i, sentence_span in enumerate(sentences):
+                matches = self.matcher(sentence_span)
 
-            for i, sentence in enumerate(sentences):
-                sentence_text = sentence.text.strip()
-                sentence_lower = sentence_text.lower()
+                if matches:
+                    _, start_token, end_token = matches[0]
 
-                if self.KEYWORD in sentence_lower:
                     # Position direkt nach dem Keyword
-                    position = sentence_lower.find(self.KEYWORD) + len(self.KEYWORD)
-                    textAfterKeyword = sentence_text[position:].strip()
+                    text_after_keyword_span = sentence_span[end_token:]
+                    textAfterKeyword = text_after_keyword_span.text.strip()
 
-                    if textAfterKeyword:
-                        first_char = textAfterKeyword[0]
+                    if not textAfterKeyword:
+                        # Wenn kein Text nach dem Keyword im Satz ist -> nächsten Satz
+                        if i + 1 < len(sentences):
+                            return sentences[i + 1].text.strip()
+                        # Wenn kein weiterer Satz existiert
+                        return ""
                         
-                        # Wenn nach dem Keyword ein Satzende ist -> nächsten Satz
-                        if first_char [0] in '.!?':
-                            if i + 1 < len(sentences):
-                                return sentences[i + 1].text.strip()
-                            return ""
+                    # Erster Charakter nach dem Keyword
+                    first_char = textAfterKeyword[0]
+                        
+                    # Wenn nach dem Keyword ein Satzende ist -> nächsten Satz
+                    if first_char in '.!?':
+                        if i + 1 < len(sentences):
+                            return sentences[i + 1].text.strip()
+                        return ""
                                                                                     
-                        # Wenn nach dem Keyword ein Komma ist -> alles danach im Satz
-                        elif first_char in ',':
-                            return textAfterKeyword[1:].strip()  # überspringt das Trennzeichen
+                    # Wenn nach dem Keyword ein Komma ist -> alles danach im Satz
+                    elif first_char in ',':
+                        return textAfterKeyword[1:].strip()
                         
-                        # Wenn der Satz direkt nach dem Keyword folgt -> Rest des Satzes
-                        else:
-                            return textAfterKeyword.strip()
+                    # Wenn der Satz direkt nach dem Keyword folgt -> Rest des Satzes
+                    else:
+                        return textAfterKeyword.strip()
 
-                else:
-                    print(f"Keyword nicht im Satz gefunden: {sentence_text}")
-
+            print(f"Es wurde kein Match für das Keyword '{self.KEYWORD}' in der Transkription gefunden.")
+            return ""
+        
         except Exception as e:
             print("Fehler bei der Extraktion des relevanten Satzes:", str(e))
         return ""
