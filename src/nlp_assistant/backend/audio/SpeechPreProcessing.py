@@ -7,7 +7,7 @@ class SpeechPreProcessing:
     def __init__(self):
         dotenv.load_dotenv()
 
-        self.model = WhisperModel("base", device="cpu", compute_type="int8")
+        self.model = WhisperModel("turbo", device="cpu", compute_type="int8")
         self.nlp = spacy.load("de_core_news_sm")
         self.KEYWORD = dotenv.get_key(dotenv.find_dotenv(), "KEYWORD").lower().strip()
 
