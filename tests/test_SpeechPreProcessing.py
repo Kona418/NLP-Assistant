@@ -1,6 +1,6 @@
 import pytest
 
-from src.nlp_assistant.helper.SpeechPreProcessing import SpeechPreProcessing
+from src.nlp_assistant.backend.audio.SpeechPreProcessing import SpeechPreProcessing
 
 class TestTextToSpeech:
     TEST_AUDIO_PATH = [["src/nlp_assistant/data/audio/heizungAuf20Grad.m4a", "Stelle die Heizung auf 20 Grad im Wohnzimmer."],

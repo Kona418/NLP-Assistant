@@ -1,10 +1,7 @@
 import pytest
-import numpy as np
-import os
 from unittest.mock import patch, MagicMock, mock_open
 
-# Import module
-from src.nlp_assistant.pipelineParts.IntentRecognizer import IntentRecognizer
+from  src.nlp_assistant.backend.core import IntentRecognizer
 
 
 @pytest.fixture

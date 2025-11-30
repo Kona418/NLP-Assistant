@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock
-from src.nlp_assistant.pipelineParts.HomeAssistantController import HomeAssistantController
-from src.nlp_assistant.helper.HomeAssistantRestManager import HomeAssistantRestManager
+
+from src.nlp_assistant.backend.connection import HomeAssistantController, HomeAssistantRestManager
+
 
 def test_init_loads_devices(real_device_list):
     # Arrange: Manager mocken und Rückgabewert setzen
