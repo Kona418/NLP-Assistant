@@ -118,4 +118,3 @@ def ha_command(self, user_input: str, intent: str) -> dict:
     self.ha_controller.post_action(action_input)
 
     return intent, raw_device_name, device_name, action_input
-    ...
