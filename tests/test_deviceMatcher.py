@@ -1,7 +1,6 @@
 import pytest
 
-
-from src.nlp_assistant.pipelineParts.deviceMatcher import DeviceMatcher
+from src.nlp_assistant.backend.core.deviceMatcher import DeviceMatcher
 
 class TestDeviceMatcher:
     TEST_CASES = [
