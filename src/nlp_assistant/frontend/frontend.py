@@ -87,9 +87,15 @@ class FrontendApp:
 
                 # --- Text Input ---
                 elif user_input_text.strip() != "":
-                    relevanter_satz = user_input_text.strip()
+                    # Extrahiere den relevanten Satz aus dem Texteingabe
+                    relevanter_satz = speech.extractTheRelevantSentence(user_input_text.strip())
+
+                    # Wenn kein Keyword verwendet wurde, gesamten Text als Befehl nutzen
+                    if relevanter_satz == "":
+                        relevanter_satz = user_input_text.strip()
+
                     st.session_state.results["relevanter_satz"] = relevanter_satz
-                    
+                    s
 
                 # --- Backend Verarbeitung des relevanten Satzes ---
                 if relevanter_satz:
@@ -116,14 +122,15 @@ class FrontendApp:
         #################################################################################
         st.set_page_config(page_title="HomeAssistant Communication", page_icon="🎙️", layout="centered")
         st.title("HomeAssistant Communication")
-    
+
+        st.text('Verwende das Keyword "Jarvis" und gebe anschließend den auszuführenden Befehl an.')
 
         #################################################################################
         # USER INPUT
         #################################################################################
         
         # Text Input
-        st.text_input("Gebe hier bitte dein Befehl ein", key="text_input_key")
+        st.text_input("Gebe hier bitte dein Befehl ein:", key="text_input_key")
 
         # Audio Input mit dynamischem session key
         dynamic_key = f"audio_input_{st.session_state.audio_key_id}"
@@ -137,7 +144,7 @@ class FrontendApp:
         ladeIcon_placeholder = st.empty()
 
         # Run Button
-        st.button("Ausführen", on_click=self.process_data, type="primary", use_container_width=True, args=[ladeIcon_placeholder])
+        st.button("Befehl ausführen", on_click=self.process_data, type="primary", use_container_width=True, args=[ladeIcon_placeholder])
 
         #################################################################################
         # ERGEBNISSE ANZEIGEN

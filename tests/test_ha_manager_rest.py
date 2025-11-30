@@ -1,6 +1,7 @@
 import pytest
-from unittest.mock import patch, MagicMock
-from src.nlp_assistant.helper.HomeAssistantRestManager import HomeAssistantRestManager
+from unittest.mock import patch
+
+from src.nlp_assistant.backend.connection import HomeAssistantRestManager
 
 
 @pytest.fixture
