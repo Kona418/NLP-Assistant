@@ -42,7 +42,7 @@ class IntentRecognizer:
     Intent recognition using TF-IDF and Cosine Similarity.
     """
 
-    def __init__(self, model_path: str = os.path.join('nlp_assistant', 'data', 'models', 'intent_model.joblib'),
+    def __init__(self, model_path: str = os.path.join('src', 'nlp_assistant', 'data', 'models', 'intent_model.joblib'),
                  debug: bool = False,
                  force_train: bool = False):
         """
