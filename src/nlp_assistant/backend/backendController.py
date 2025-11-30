@@ -1,4 +1,6 @@
 import os
+import random
+
 from dotenv import load_dotenv
 
 from nlp_assistant.backend.connection.HomeAssistantController import HomeAssistantController
@@ -43,19 +45,77 @@ class backendController:
 
         # Intent Erkennung
         intent = self.intent_recognizer.predict(user_input)[0]
-        
-        # Extraktion des DeviceName und Abgleich mit der Geräteliste des HomeAssistant
-        raw_device_name: str = self.deviceMatcher.extractDeviceNamesFromCommands(user_input)
-        device_name: dict = self.deviceMatcher.findBestDeviceMatch(targetDeviceName=raw_device_name, deviceList=self.deviceList)
 
-        # Aktion erstellen und an HomeAssistant senden
-        action_input: dict = {
+        match intent:
+            case "turn_on":
+                execution_data = ha_command(self, intent=intent, user_input=user_input)
+
+                anschalten = [
+                    f"Schalte {execution_data[2].get('name')} an.",
+                    f"Schalte {execution_data[2].get('name')} ein.",
+                    f"Aktiviere {execution_data[2].get('name')}.",
+                    f"Mache {execution_data[2].get('name')} an.",
+                    f"Starte {execution_data[2].get('name')}."
+                ]
+
+                output_string: str = random.choice(anschalten)
+
+                print(output_string)
+
+                return execution_data
+
+            case "turn_off":
+                execution_data = ha_command(self, intent=intent, user_input=user_input)
+
+                ausschalten = [
+                    f"Schalte {execution_data[2].get('name')} aus.",
+                    f"Deaktiviere {execution_data[2].get('name')}.",
+                    f"Mache {execution_data[2].get('name')} aus.",
+                    f"Schalte {execution_data[2].get('name')} ab.",
+                    f"Stoppe {execution_data[2].get('name')}."
+                ]
+
+                output_string: str = random.choice(ausschalten)
+
+                print(output_string)
+
+                return execution_data
+
+            case "toggle":
+                execution_data = ha_command(self, intent=intent, user_input=user_input)
+
+                umschalten = [
+                    f"Schalte {execution_data[2].get('name')} um.",
+                    f"Wechsle den Status von {execution_data[2].get('name')}.",
+                    f"Ändere den Zustand von {execution_data[2].get('name')}.",
+                    f"Invertiere {execution_data[2].get('name')}.",
+                    f"Betätige den Schalter für {execution_data[2].get('name')}."
+                ]
+
+                output_string: str = random.choice(umschalten)
+
+                print(output_string)
+
+                return execution_data
+
+            case _:
+                print("Unknown Intent")
+
+def ha_command(self, user_input: str, intent: str) -> dict:
+    # Extraktion des DeviceName und Abgleich mit der Geräteliste des HomeAssistant
+    raw_device_name: str = self.deviceMatcher.extractDeviceNamesFromCommands(user_input)
+    device_name: dict = self.deviceMatcher.findBestDeviceMatch(targetDeviceName=raw_device_name,
+                                                               deviceList=self.deviceList)
+
+    # Aktion erstellen und an HomeAssistant senden
+    action_input: dict = {
         "domain": f"{device_name["type"]}",
         "service": f"{intent}",
         "name": f"{device_name["name"]}"
-        }
+    }
 
-        # Aktion an HomeAssistant senden
-        self.ha_controller.post_action(action_input)
+    # Aktion an HomeAssistant senden
+    self.ha_controller.post_action(action_input)
 
-        return intent, raw_device_name, device_name, action_input
+    return intent, raw_device_name, device_name, action_input
+    ...
