@@ -13,7 +13,7 @@ class VoiceAssistant:
     """
 
     def __init__(self,
-                 model_path: str = os.path.join("src", "nlp_assistant", "data", "models", "de_DE-ramona-low.onnx"),
+                 model_path: str = os.path.join("src", "nlp_assistant", "data", "models", "de_DE-thorsten_emotional-medium.onnx"),
                  debug: bool = False):
         """
         Initializes the VoiceAssistant.
