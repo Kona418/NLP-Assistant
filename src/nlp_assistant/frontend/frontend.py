@@ -95,7 +95,6 @@ class FrontendApp:
                         relevanter_satz = user_input_text.strip()
 
                     st.session_state.results["relevanter_satz"] = relevanter_satz
-                    s
 
                 # --- Backend Verarbeitung des relevanten Satzes ---
                 if relevanter_satz:
