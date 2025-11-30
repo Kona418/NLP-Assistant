@@ -281,3 +281,14 @@ class IntentRecognizer:
             return None, best_score
 
         return self.training_labels[best_index], best_score
+
+
+if __name__ == "__main__":
+    print("~~~~~~~ Start IntentRecognizer Direct Execution ~~~~~~~")
+
+    recognizer = IntentRecognizer(debug=True, force_train=True)
+
+    test_phrase = "mach die Deckenlampe an."
+    print(f"\nTest Prediction for: '{test_phrase}'")
+    intent, confidence = recognizer.predict(test_phrase)
+    print(f"Result -> Intent: {intent}, Confidence: {confidence:.2f}")
