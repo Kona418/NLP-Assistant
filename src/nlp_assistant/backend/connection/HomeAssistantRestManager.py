@@ -1,21 +1,34 @@
 import json
-
 import requests
+
 
 class HomeAssistantRestManager():
     supported_devices: list = ["light", "switch"]
 
     ha_base_url: str
     headers: dict
+    dummy_file_path: str
 
-    def __init__(self, ha_base_url: str, ha_bearer_token: str):
+    def __init__(self, ha_base_url: str, ha_bearer_token: str, dummy_file_path: str = "src/nlp_assistant/data/deviceList.json"):
         self.ha_base_url = ha_base_url
+        self.dummy_file_path = dummy_file_path
         self.headers = {
             "Authorization": f"Bearer {ha_bearer_token}",
             "content-type": "application/json",
         }
 
+    def _check_connection(self) -> bool:
+        try:
+            response = requests.get(f"{self.ha_base_url}/api/", headers=self.headers, timeout=2)
+            return response.status_code == 200
+        except requests.RequestException:
+            return False
+
     def post_action(self, action_data: dict, device_list: list) -> dict | None:
+        if not self._check_connection():
+            print(f"[SIMULATION] Verbindung fehlgeschlagen. Simuliere Aktion: {action_data}")
+            return {"success": True, "simulation": True}
+
         try:
             domain: str = action_data.pop("domain")
             service: str = action_data.pop("service")
@@ -62,6 +75,18 @@ class HomeAssistantRestManager():
         return None
 
     def get_device_list(self) -> list:
+        if not self._check_connection():
+            print("Verbindung zu HA fehlgeschlagen. Lade Dummy-Liste.")
+            try:
+                with open(self.dummy_file_path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except FileNotFoundError:
+                print(f"Dummy-Datei '{self.dummy_file_path}' nicht gefunden.")
+                return []
+            except json.JSONDecodeError:
+                print(f"Fehler beim Lesen der JSON Datei '{self.dummy_file_path}'.")
+                return []
+
         services_response: requests.Response = requests.get(f"{self.ha_base_url}/api/services", headers=self.headers)
         services_data: list = services_response.json()
 
@@ -73,7 +98,6 @@ class HomeAssistantRestManager():
             domain_name: str = domain_item.get("domain")
             if domain_name in self.supported_devices:
                 service_map[domain_name] = list(domain_item.get("services"))
-
 
         final_device_list: list = []
         for entity in states_data:
@@ -95,7 +119,8 @@ class HomeAssistantRestManager():
                 if domain == "light":
                     supported_modes: list = attributes.get("supported_color_modes", [])
 
-                    if any(mode in supported_modes for mode in ['brightness', 'color_temp', 'hs', 'xy', 'rgb', 'rgbw', 'rgbww']):
+                    if any(mode in supported_modes for mode in
+                           ['brightness', 'color_temp', 'hs', 'xy', 'rgb', 'rgbw', 'rgbww']):
                         device_dict["capabilities"]["can_set_brightness"] = True
 
                         if 'color_temp' in supported_modes:
@@ -107,5 +132,5 @@ class HomeAssistantRestManager():
                             device_dict["capabilities"]["can_set_color"] = True
 
                 final_device_list.append(device_dict)
-        # print(json.dumps(obj=final_device_list, indent=4))
+
         return final_device_list
