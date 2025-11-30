@@ -1,5 +1,5 @@
 import spacy
-
+from nltk.metrics import edit_distance
 
 class DeviceMatcher:
 
@@ -14,6 +14,11 @@ class DeviceMatcher:
             download("de_core_news_lg")
             self.nlp= spacy.load("de_core_news_lg")
         
+    @staticmethod
+    def cleanString(s: str) -> str:
+        """Reinigt den String für den Abgleich."""
+        return s.lower().replace("-", " ").replace("_", " ").strip()
+    
 
     def findBestDeviceMatch(self, targetDeviceName: str, deviceList: list) -> dict | None:
         """
@@ -27,25 +32,55 @@ class DeviceMatcher:
             dict | None: Das beste passende Gerät oder None, wenn kein passendes Gerät gefunden wurde.
         """
 
-        targetDeviceName_doc: spacy.tokens.Doc = self.nlp(targetDeviceName.lower().replace("-", " ").replace("_", " ").strip())
-        best_match: dict | None = None
-        highest_similarity: float = 0.0
+        # Initialisierung
+        best_match_Vector: dict | None = None
+        best_match_Levenshtein: dict | None = None
+        highest_Vector_similarity: float = 0.0
+        highest_Levenshtein_Similarity: float = 0.0
 
+        clean_targetDeviceName: str = self.cleanString(targetDeviceName)
+        targetDeviceName_doc: spacy.tokens.Doc = self.nlp(clean_targetDeviceName)
+
+        if  clean_targetDeviceName == "" or len(deviceList) == 0:
+            print("Kein Gerätename zum Abgleichen angegeben.")
+            return None
+        
         for device in deviceList:
-            device_name = (device['name'].lower().replace("-", " ").replace("_", " ").strip())
-            device_doc: spacy.tokens.Doc = self.nlp(device_name)
-            similarity: float = targetDeviceName_doc.similarity(device_doc)
+            clean_device_name: str = self.cleanString(device['name'])
 
-            if similarity > highest_similarity:
-                highest_similarity = similarity
-                best_match = device
+            # 1. Vektor Similarity
+            device_doc: spacy.tokens.Doc = self.nlp(clean_device_name)
+            similarity_Vector: float = targetDeviceName_doc.similarity(device_doc)
 
-        # Überprüfung, ob die höchste Ähnlichkeit über dem Schwellenwert liegt
-        if highest_similarity >= self.SIMILARITY_THRESHOLD:
-            print(f"Bestes Match für: '{targetDeviceName}' =  '{best_match['name']}' mit Ähnlichkeit {highest_similarity:.2f}")
-            return best_match
+            if similarity_Vector > highest_Vector_similarity:
+                highest_Vector_similarity = similarity_Vector
+                best_match_Vector = device
+
+            # 2. Normalisierte Levenshtein-Distanz
+            distanz = edit_distance(clean_device_name, clean_targetDeviceName)
+            max_len = max(len(clean_device_name), len(clean_targetDeviceName))
+            
+            similarity_Ratio_Levenshtein: float = 1.0 - (distanz / max_len)  
+            
+            if similarity_Ratio_Levenshtein > highest_Levenshtein_Similarity:
+                highest_Levenshtein_Similarity = similarity_Ratio_Levenshtein
+                best_match_Levenshtein = device
+
+
+        # Überprüfung, ob die höchste Ähnlichkeit über dem Schwellenwert liegt 
+        # 1. Vektor Similarity 
+        # 2. Levenshtein Similarity
+        if highest_Vector_similarity >= self.SIMILARITY_THRESHOLD:
+            print(f"Bestes Match für: '{targetDeviceName}' =  '{best_match_Vector['name']}' mit einer Similartiy von {highest_Vector_similarity:.2f}")
+            return best_match_Vector
+        
+        elif highest_Levenshtein_Similarity >= self.SIMILARITY_THRESHOLD:
+            print(f"Bestes Match für: '{targetDeviceName}' =  '{best_match_Levenshtein['name']}' mit einer Levinshtein-Similarity von {highest_Levenshtein_Similarity:.2f}")
+            return best_match_Levenshtein
+        
         else:
             print(f"Es wurde kein Match für das Gerät '{targetDeviceName}' gefunden.")
+            print(f"Levenshtein-Similarity: {highest_Levenshtein_Similarity:.2f}, Vector-Similarity: {highest_Vector_similarity:.2f}")
             return None
             
 
@@ -64,6 +99,7 @@ class DeviceMatcher:
         # Definiere relevante Abhängigkeitsbeziehungen
         target_deps: list[str] = ["oa", "obj", "dobj", "sb", "nsubj", "pd"]
         
+        # Sammle potenzielle Kandidaten
         candidates: list[tuple[int, str]] = []
 
         for token in doc:
@@ -86,7 +122,7 @@ class DeviceMatcher:
                         relevant_words.append(sub_token.text)
 
                 if relevant_words:
-                    # Die relevanten Wörter zu einem String zusammenfügen
+                    # Die relevanten Wörter zu einem String zusammenfügen -> ["TV" "Steckdose"] -> "TV Steckdose"
                     phrase: str = " ".join(relevant_words)
                     
                     # Setze die Priorität basierend auf der Dependency des Tokens

@@ -8,17 +8,45 @@ from typing import Iterator, Optional
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+# Globaler NLP-Cache für die Tokenizer-Funktion (notwendig für joblib pickling)
+_nlp_model = None
+
+
+def _global_spacy_tokenizer(text: str) -> list[str]:
+    """
+    Standalone tokenizer function to allow pickling of the TfidfVectorizer.
+    """
+    global _nlp_model
+    if _nlp_model is None:
+        try:
+            _nlp_model = spacy.load("de_core_news_sm")
+        except OSError:
+            from spacy.cli import download
+            download("de_core_news_sm")
+            _nlp_model = spacy.load("de_core_news_sm")
+
+    doc = _nlp_model(text)
+    tokens: list[str] = []
+
+    # Relevant POS tags for intent (verbs, adverbs, particles)
+    intent_relevant_pos = {"VERB", "AUX", "ADJ", "ADV", "PART", "ADP"}
+
+    for token in doc:
+        if token.pos_ in intent_relevant_pos:
+            tokens.append(token.lemma_.lower())
+    return tokens
+
 
 class IntentRecognizer:
     """
     Intent recognition using TF-IDF and Cosine Similarity.
     """
 
-    def __init__(self, model_path: str = os.path.join('nlp_assistant','data', 'models', 'intent_model.joblib'),
+    def __init__(self, model_path: str = os.path.join('nlp_assistant', 'data', 'models', 'intent_model.joblib'),
                  debug: bool = False,
                  force_train: bool = False):
         """
-        Initializes the recognizer and loads the spaCy language model.
+        Initializes the recognizer.
 
         Args:
             model_path (str): Path to save/load the trained model.
@@ -28,25 +56,12 @@ class IntentRecognizer:
         self.model_path: str = model_path
         self.threshold: float = 0.4
         self.debug: bool = debug
-        self.debug: bool = debug
         self.force_train: bool = force_train
 
-        # --- Init spaCy ---
-        if self.debug:
-            print("* Initializing spaCy model...")
-
-        try:
-            self.nlp = spacy.load("de_core_news_sm")
-        except OSError:
-            if self.debug:
-                print("! Downloading model 'de_core_news_sm'...")
-            from spacy.cli import download
-            download("de_core_news_sm")
-            self.nlp = spacy.load("de_core_news_sm")
-
         # --- Configure Vectorizer ---
+        # Note: Uses global tokenizer function to support joblib serialization
         self.vectorizer: TfidfVectorizer = TfidfVectorizer(
-            tokenizer=self._spacy_tokenizer,
+            tokenizer=_global_spacy_tokenizer,
             token_pattern=None,
             ngram_range=(1, 2),
             lowercase=True,
@@ -57,6 +72,8 @@ class IntentRecognizer:
         self.training_labels: list[str] = []
         self.tfidf_matrix = None
         self.is_trained: bool = False
+
+        # Initial load attempt
         self.load_model()
 
     def _load_data_from_csv(self, csv_path: str, delimiter: str = ',') -> tuple[list[str], list[str]]:
@@ -91,27 +108,6 @@ class IntentRecognizer:
 
             return data, label
 
-    def _spacy_tokenizer(self, text: str) -> list[str]:
-        """
-        Tokenizes text, keeps relevant POS tags, and lemmatizes.
-
-        Args:
-            text (str): Input text.
-
-        Returns:
-            list[str]: List of lemmas.
-        """
-        doc = self.nlp(text)
-        tokens: list[str] = []
-
-        # Relevant POS tags for intent (verbs, adverbs, particles)
-        intent_relevant_pos = {"VERB", "AUX", "ADJ", "ADV", "PART", "ADP"}
-
-        for token in doc:
-            if token.pos_ in intent_relevant_pos:
-                tokens.append(token.lemma_.lower())
-        return tokens
-
     def _save_to_disk(self):
         """
         Saves the current model state to disk.
@@ -132,7 +128,8 @@ class IntentRecognizer:
         if self.debug:
             print(f"--> Model Saved Successfully")
 
-    def train_and_save(self, csv_path: str = os.path.join('src', 'nlp_assistant','data', 'trainingData', 'training_data.csv'), delimiter: str = ",",
+    def train_and_save(self, csv_path: str = os.path.join('src', 'nlp_assistant', 'data', 'trainingData',
+                                                          'training_data.csv'), delimiter: str = ",",
                        test_size: float = 0.2):
         """
         Trains the model on a split, evaluates it, and saves the result.
@@ -206,9 +203,7 @@ class IntentRecognizer:
                 correct_predictions += 1
             else:
                 if self.debug:
-                    tokens = self._spacy_tokenizer(text)
-                    print(f"  [MISS] '{text}' -> Tokens: {tokens}")
-                    print(f"         Pred: {predicted_label} ({score:.2f}) | True: {true_label}")
+                    print(f"  [MISS] '{text}' -> Pred: {predicted_label} ({score:.2f}) | True: {true_label}")
 
         accuracy: float = correct_predictions / len(x_test_sub) if len(x_test_sub) > 0 else 0.0
 
@@ -220,26 +215,27 @@ class IntentRecognizer:
         self._save_to_disk()
 
     def load_model(self) -> bool:
-
         """
         Loads the model from the file system.
-        Returns False if force_train is True or file does not exist.
 
         Returns:
-            bool: True if loading was successful, False otherwise.
+            bool: True if model is ready (loaded or trained), False if loading/training failed.
         """
-        if self.force_train:
-            self.train_and_save()
-            if self.debug:
-                print("! Force train enabled. Skipping load.")
-            return False
+        # Case 1: Force train or file missing -> Train
+        if self.force_train or not os.path.exists(self.model_path):
+            if self.debug and self.force_train:
+                print("! Force train enabled. Triggering training...")
 
-        if not os.path.exists(self.model_path):
-            self.train_and_save()
+            try:
+                self.train_and_save()
+                return True  # Successfully trained
+            except Exception as e:
+                if self.debug:
+                    print(f"Error during enforced training: {e}")
+                return False
 
+        # Case 2: Load existing model
         try:
-            if not os.path.exists(self.model_path):
-                 self.train_and_save()
             data = joblib.load(self.model_path)
             self.vectorizer = data["vectorizer"]
             self.tfidf_matrix = data["tfidf_matrix"]
@@ -250,7 +246,16 @@ class IntentRecognizer:
         except Exception as e:
             if self.debug:
                 print(f"Error loading model: {e}")
-            return False
+                print("! Attempting to retrain due to load error...")
+
+            # Fallback: Retrain if load fails
+            try:
+                self.train_and_save()
+                return True
+            except Exception as train_e:
+                if self.debug:
+                    print(f"Retraining failed: {train_e}")
+                return False
 
     def predict(self, user_input: str) -> tuple[Optional[str], float]:
         """
