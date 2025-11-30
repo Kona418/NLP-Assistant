@@ -7,7 +7,7 @@ from typing import Optional
 from piper import PiperVoice
 
 
-class VoiceAssistant:
+class TextToSpeech:
     """
     Text-to-Speech handler using Piper and OS-native audio playback.
     """
@@ -16,7 +16,7 @@ class VoiceAssistant:
                  model_path: str = os.path.join("src", "nlp_assistant", "data", "models", "de_DE-thorsten_emotional-medium.onnx"),
                  debug: bool = False):
         """
-        Initializes the VoiceAssistant.
+        Initializes the TextToSpeech Engine.
         """
         self.model_path: str = model_path
         self.debug: bool = debug
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
     # Standard Pfad aus __init__ wird genutzt
     try:
-        assistant = VoiceAssistant(debug=True)
+        assistant = TextToSpeech(debug=True)
         now = time.time()
         assistant.speak("Das ist ein Test.")
         took_time = time.time()-now

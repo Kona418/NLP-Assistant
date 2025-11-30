@@ -7,6 +7,7 @@ from nlp_assistant.backend.connection.HomeAssistantController import HomeAssista
 from nlp_assistant.backend.connection.HomeAssistantRestManager import HomeAssistantRestManager
 from nlp_assistant.backend.core.IntentRecognizer import IntentRecognizer
 from nlp_assistant.backend.core.deviceMatcher import DeviceMatcher
+from nlp_assistant.backend.audio.TextToSpeech import TextToSpeech
 
 
 class backendController:
@@ -37,6 +38,8 @@ class backendController:
             import json
             self.deviceList = json.load(f)
 
+        self.textToSpeechModule: TextToSpeech = TextToSpeech()
+
         print("--- Initialization complete! ---")
 
 
@@ -60,7 +63,7 @@ class backendController:
 
                 output_string: str = random.choice(anschalten)
 
-                print(output_string)
+                self.textToSpeechModule.speak(output_string)
 
                 return execution_data
 
@@ -77,7 +80,7 @@ class backendController:
 
                 output_string: str = random.choice(ausschalten)
 
-                print(output_string)
+                self.textToSpeechModule.speak(output_string)
 
                 return execution_data
 
@@ -94,12 +97,23 @@ class backendController:
 
                 output_string: str = random.choice(umschalten)
 
-                print(output_string)
+                self.textToSpeechModule.speak(output_string)
 
                 return execution_data
 
             case _:
-                print("Unknown Intent")
+                nicht_verstanden = [
+                    "Ich habe dich leider nicht verstanden.",
+                    "Entschuldigung, das habe ich akustisch nicht ganz mitbekommen.",
+                    "Könntest du das bitte wiederholen? Ich bin mir unsicher.",
+                    "Diesen Befehl kenne ich leider noch nicht.",
+                    "Das war mir nicht ganz klar. Bitte versuche es noch einmal."
+                ]
+
+                output_string = random.choice(nicht_verstanden)
+
+                self.textToSpeechModule.speak(output_string)
+                return None
 
 def ha_command(self, user_input: str, intent: str) -> dict:
     # Extraktion des DeviceName und Abgleich mit der Geräteliste des HomeAssistant
