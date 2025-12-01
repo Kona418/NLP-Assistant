@@ -122,69 +122,69 @@ class FrontendApp:
         st.set_page_config(page_title="HomeAssistant Communication", page_icon="🎙️", layout="centered")
         st.title("HomeAssistant Communication")
 
-        st.text('Verwende das Keyword "Jarvis" und gebe anschließend den auszuführenden Befehl an.')
+        # Ergebnisse aus Session State laden
+        results = st.session_state.get("results", {})
+
+        # Tabs erstellen
+        tab_input, tab_results = st.tabs(["Userinput", "Ergebnisse & Details"])
 
         #################################################################################
         # USER INPUT
         #################################################################################
-        
-        # Text Input
-        st.text_input("Gebe hier bitte dein Befehl ein:", key="text_input_key")
+        with tab_input:
+            st.info('Verwende das Keyword "Jarvis" und gebe anschließend den auszuführenden Befehl an.')
 
-        # Audio Input mit dynamischem session key
-        dynamic_key = f"audio_input_{st.session_state.audio_key_id}"
-        
-        st.audio_input(
-            label="Drücke den Mikrofon Button, um die Aufnahme zu starten:",
-            sample_rate=16000,
-            key=dynamic_key
-        )
+            # Text Input
+            st.text_input("Gebe hier bitte dein Befehl ein:", key="text_input_key")
 
-        ladeIcon_placeholder = st.empty()
-
-        # Run Button
-        st.button("Befehl ausführen", on_click=self.process_data, type="primary", use_container_width=True, args=[ladeIcon_placeholder])
-
-        #################################################################################
-        # ERGEBNISSE ANZEIGEN
-        #################################################################################
-        st.divider()
-        st.subheader("Ergebnisse")
-
-        # Ergebnisse aus Session State laden
-        results = st.session_state.get("results", {})
-
-        # Transkript anzeigen
-        if "transkript" in results:
-            st.code(f"Transkript: {results['transkript']}", language="text")
-
-        # Befehl anzeigen
-        if "relevanter_satz" in results:
-            st.code(f"Befehl: {results['relevanter_satz']}", language="text")
+            # Audio Input mit dynamischem session key
+            dynamic_key = f"audio_input_{st.session_state.audio_key_id}"
             
-        if "intent" in results:
-            # Backend Aktion
-            action_data = json.dumps(results.get("action_input", {}), indent=4)
-            st.code(f"Aktion: \n{action_data}", language="json")
+            st.audio_input(
+                label="Drücke den Mikrofon Button, um die Aufnahme zu starten:",
+                sample_rate=16000,
+                key=dynamic_key
+            )
 
-            # Erkanntes Gerät
-            device_data = json.dumps(results.get("device_name", {}), indent=4)
-            st.code(f"Erkanntes Gerät: \n{device_data}", language="json")
+            ladeIcon_placeholder = st.empty()
 
+            # Run Button
+            st.button("Befehl ausführen", on_click=self.process_data, type="primary", use_container_width=True, args=[ladeIcon_placeholder])
 
             # Erfolgs- und Fehlermeldungen der Backend Aktion
             if results.get("backend_success"):
                 st.success(f"Aktion erfolgreich ausgeführt.")
             else:
                 st.warning(f"Aktion nicht erfolgreich ausgeführt.")
-        
+            
 
-        if "error" in results:
-            st.error(results["error"])
-        
-        if "backend_error" in results:
-            st.error(results["backend_error"])
+            if "error" in results:
+                st.error(results["error"])
+            
+            if "backend_error" in results:
+                st.error(results["backend_error"])
 
+        #################################################################################
+        # ERGEBNISSE ANZEIGEN
+        #################################################################################
+        with tab_results:
+
+            # Transkript anzeigen
+            if "transkript" in results:
+                st.code(f"Transkript: {results['transkript']}", language="text")
+
+            # Befehl anzeigen
+            if "relevanter_satz" in results:
+                st.code(f"Befehl: {results['relevanter_satz']}", language="text")
+                
+            if "intent" in results:
+                # Backend Aktion
+                action_data = json.dumps(results.get("action_input", {}), indent=4)
+                st.code(f"Backend Aktion: {action_data}", language="json")
+
+                # Erkanntes Gerät
+                device_data = json.dumps(results.get("device_name", {}), indent=4)
+                st.code(f"Erkanntes Gerät: {device_data}", language="json")
 
 if __name__ == "__main__":
     FrontendApp().run()
