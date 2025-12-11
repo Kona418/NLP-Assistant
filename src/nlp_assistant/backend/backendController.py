@@ -16,12 +16,13 @@ class backendController:
 
         # Laden der Umgebungsvariablen
         load_dotenv()        
-        token = os.getenv("HA_TOKEN")
+        token: str = os.getenv("HA_TOKEN")
+        HA_URL: str = os.getenv("HA_URL")
         
         # Initialisierung der HomeAssistant Verbindung
         self.ha_manager = HomeAssistantRestManager(
             ha_bearer_token=token, 
-            ha_base_url="http://homeassistant.local:8123"
+            ha_base_url=HA_URL
         )
 
         # Initialisierung des HomeAssistant Controllers

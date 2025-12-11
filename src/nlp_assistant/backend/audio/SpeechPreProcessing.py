@@ -1,5 +1,6 @@
 import dotenv
 import spacy
+import os
 from faster_whisper import WhisperModel
 from spacy.matcher import PhraseMatcher
 from spacy.tokens import Span
@@ -15,7 +16,7 @@ class SpeechPreProcessing:
         
         # Laden des Keywords aus der .env Datei
         dotenv.load_dotenv()
-        self.KEYWORD = dotenv.get_key(dotenv.find_dotenv(), "KEYWORD").lower().strip()
+        self.KEYWORD = os.getenv("KEYWORD", "jarvis").lower().strip()
 
         # Keyword vorbereiten
         cleaned_keyword = self.KEYWORD.lower().strip()

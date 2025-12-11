@@ -1,0 +1,13 @@
+services:
+  nlp-assistant:
+    build: .
+    container_name: nlp_assistant_container
+    ports:
+      - "8501:8501"
+    network_mode: "host"
+    environment:
+      - HA_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2M2Q5ZjIyN2NkNzE0MWJlYTA2NGI5Y2NiMzk1MDE2OSIsImlhdCI6MTc2MzMxOTA5NiwiZXhwIjoyMDc4Njc5MDk2fQ.QiaWVCcqCv1Au-67-eCm1UIzndyMuef3SQx7KXrwENc
+      - KEYWORD=Jarvis
+      - HA_URL=http://192.168.50.30:8123
+
+    restart: unless-stopped

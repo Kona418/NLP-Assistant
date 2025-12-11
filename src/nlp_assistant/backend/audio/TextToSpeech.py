@@ -20,7 +20,7 @@ class TextToSpeech:
         """
         self.model_path: str = model_path
         self.debug: bool = debug
-        self.temp_wav_path: str = "temp_output.wav"
+        self.temp_wav_path: str = "out/audio/temp_output.wav"
         self.voice: Optional[PiperVoice] = None
 
         if self.debug:
@@ -56,28 +56,6 @@ class TextToSpeech:
     def _synthesize_wav(self, text: str) -> None:
         with wave.open(self.temp_wav_path, "wb") as wav_file:
             self.voice.synthesize_wav(text, wav_file)
-
-    # def _play_wav(self) -> None:
-    #     if not os.path.exists(self.temp_wav_path):
-    #         return
-    #
-    #     if sys.platform.startswith("win"):
-    #         subprocess.run(
-    #             ["cmd", "/c", "start", "/min", "", self.temp_wav_path],
-    #             check=True
-    #         )
-    #     else:
-    #         players = [
-    #             ["aplay", self.temp_wav_path],
-    #             ["ffplay", "-nodisp", "-autoexit", self.temp_wav_path],
-    #             ["paplay", self.temp_wav_path]
-    #         ]
-    #         for cmd in players:
-    #             try:
-    #                 subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    #                 break
-    #             except (FileNotFoundError, subprocess.CalledProcessError):
-    #                 continue
 
     def _cleanup(self) -> None:
         if os.path.exists(self.temp_wav_path):
