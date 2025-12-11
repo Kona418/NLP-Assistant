@@ -31,50 +31,53 @@ class TextToSpeech:
 
         self.voice = PiperVoice.load(self.model_path)
 
-    def speak(self, text: str) -> None:
+    def speak(self, text: str) -> str | None:
         """
-        Synthesizes text to a temporary WAV file and plays it.
+        Synthesizes text to a temporary WAV file and return the path.
         """
+
+
         if not text:
-            return
+            return None
 
         if self.debug:
             print(f"* Speaking: '{text}'")
 
         try:
             self._synthesize_wav(text)
-            self._play_wav()
+            return self.temp_wav_path
+            # self._play_wav()
         except Exception as e:
             if self.debug:
-                print(f"Error during speech synthesis/playback: {e}")
-        finally:
-            self._cleanup()
+                print(f"Error during speech synthesis: {e}")
+        # finally:
+        #     self._cleanup()
 
     def _synthesize_wav(self, text: str) -> None:
         with wave.open(self.temp_wav_path, "wb") as wav_file:
             self.voice.synthesize_wav(text, wav_file)
 
-    def _play_wav(self) -> None:
-        if not os.path.exists(self.temp_wav_path):
-            return
-
-        if sys.platform.startswith("win"):
-            subprocess.run(
-                ["cmd", "/c", "start", "/min", "", self.temp_wav_path],
-                check=True
-            )
-        else:
-            players = [
-                ["aplay", self.temp_wav_path],
-                ["ffplay", "-nodisp", "-autoexit", self.temp_wav_path],
-                ["paplay", self.temp_wav_path]
-            ]
-            for cmd in players:
-                try:
-                    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                    break
-                except (FileNotFoundError, subprocess.CalledProcessError):
-                    continue
+    # def _play_wav(self) -> None:
+    #     if not os.path.exists(self.temp_wav_path):
+    #         return
+    #
+    #     if sys.platform.startswith("win"):
+    #         subprocess.run(
+    #             ["cmd", "/c", "start", "/min", "", self.temp_wav_path],
+    #             check=True
+    #         )
+    #     else:
+    #         players = [
+    #             ["aplay", self.temp_wav_path],
+    #             ["ffplay", "-nodisp", "-autoexit", self.temp_wav_path],
+    #             ["paplay", self.temp_wav_path]
+    #         ]
+    #         for cmd in players:
+    #             try:
+    #                 subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    #                 break
+    #             except (FileNotFoundError, subprocess.CalledProcessError):
+    #                 continue
 
     def _cleanup(self) -> None:
         if os.path.exists(self.temp_wav_path):

@@ -99,13 +99,21 @@ class FrontendApp:
                 # --- Backend Verarbeitung des relevanten Satzes ---
                 if relevanter_satz:
                     try:
-                        intent, raw_device_name, device_name, action_input = backend_manager.process_command(
-                            relevanter_satz
-                        )
-                        st.session_state.results["intent"] = intent
-                        st.session_state.results["device_name"] = device_name
-                        st.session_state.results["action_input"] = action_input
-                        st.session_state.results["backend_success"] = action_input.get("success", False)
+
+                        result_dict: dict = backend_manager.process_command(relevanter_satz)
+
+                        execution_data: dict = result_dict.get("execution_data")
+
+                        if result_dict and "audio_path" in result_dict:
+                            audio_path = result_dict["audio_path"]
+                            if audio_path and os.path.exists(audio_path):
+                                # Autoplay im Browser!
+                                st.session_state.results["audio_playback_path"] = audio_path
+
+                        st.session_state.results["intent"] = execution_data.get("intent")
+                        st.session_state.results["device_name"] = execution_data.get("device_name")
+                        st.session_state.results["action_input"] = execution_data.get("action_input")
+                        st.session_state.results["backend_success"] = execution_data.get("action_input").get("success", False)
 
                     except Exception as e:
                         st.session_state.results["backend_error"] = f"Fehler im Backend: {e}"
@@ -151,6 +159,11 @@ class FrontendApp:
             # Run Button
             st.button("Befehl ausführen", on_click=self.process_data, type="primary", use_container_width=True, args=[ladeIcon_placeholder])
 
+            audio_path: str = results.get("audio_playback_path")
+
+            if audio_path and os.path.exists(audio_path):
+
+                st.audio(audio_path, format="audio/wav", autoplay=True)
             # Erfolgs- und Fehlermeldungen der Backend Aktion
             if results.get("backend_success"):
                 st.success(f"Aktion erfolgreich ausgeführt.")
