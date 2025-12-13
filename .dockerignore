@@ -1,0 +1,23 @@
+# Version control and IDE
+.git
+.vscode
+.idea
+
+# Python cache and environments
+__pycache__
+*.pyc
+.env
+.venv
+env/
+venv/
+
+# Ignore local Windows binaries (Linux uses its own ffmpeg)
+src/nlp_assistant/data/models/ffmpeg-*-essentials_build
+
+# Ignore temporary audio files
+src/nlp_assistant/data/audio/*.mp3
+src/nlp_assistant/data/audio/*.wav
+
+# Docker configuration files
+Dockerfile
+docker-compose.yml

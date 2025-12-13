@@ -16,12 +16,13 @@ class backendController:
 
         # Laden der Umgebungsvariablen
         load_dotenv()        
-        token = os.getenv("HA_TOKEN")
+        token: str = os.getenv("HA_TOKEN")
+        HA_URL: str = os.getenv("HA_URL")
         
         # Initialisierung der HomeAssistant Verbindung
         self.ha_manager = HomeAssistantRestManager(
             ha_bearer_token=token, 
-            ha_base_url="http://192.168.50.30:8123"
+            ha_base_url=HA_URL
         )
 
         # Initialisierung des HomeAssistant Controllers
@@ -54,52 +55,64 @@ class backendController:
                 execution_data = ha_command(self, intent=intent, user_input=user_input)
 
                 anschalten = [
-                    f"Schalte {execution_data[2].get('name')} an.",
-                    f"Schalte {execution_data[2].get('name')} ein.",
-                    f"Aktiviere {execution_data[2].get('name')}.",
-                    f"Mache {execution_data[2].get('name')} an.",
-                    f"Starte {execution_data[2].get('name')}."
+                    f"Schalte {execution_data.get("device_name").get('name')} an.",
+                    f"Schalte {execution_data.get("device_name").get('name')} ein.",
+                    f"Aktiviere {execution_data.get("device_name").get('name')}.",
+                    f"Mache {execution_data.get("device_name").get('name')} an.",
+                    f"Starte {execution_data.get("device_name").get('name')}."
                 ]
 
                 output_string: str = random.choice(anschalten)
 
-                self.textToSpeechModule.speak(output_string)
+                audio_path: str = self.textToSpeechModule.speak(output_string)
 
-                return execution_data
+                return {
+                    "execution_data": execution_data,
+                    "audio_path": audio_path,
+                    "audio_synth_success": True
+                }
 
             case "turn_off":
                 execution_data = ha_command(self, intent=intent, user_input=user_input)
 
                 ausschalten = [
-                    f"Schalte {execution_data[2].get('name')} aus.",
-                    f"Deaktiviere {execution_data[2].get('name')}.",
-                    f"Mache {execution_data[2].get('name')} aus.",
-                    f"Schalte {execution_data[2].get('name')} ab.",
-                    f"Stoppe {execution_data[2].get('name')}."
+                    f"Schalte {execution_data.get("device_name").get('name')} aus.",
+                    f"Deaktiviere {execution_data.get("device_name").get('name')}.",
+                    f"Mache {execution_data.get("device_name").get('name')} aus.",
+                    f"Schalte {execution_data.get("device_name").get('name')} ab.",
+                    f"Stoppe {execution_data.get("device_name").get('name')}."
                 ]
 
                 output_string: str = random.choice(ausschalten)
 
-                self.textToSpeechModule.speak(output_string)
+                audio_path: str = self.textToSpeechModule.speak(output_string)
 
-                return execution_data
+                return {
+                    "execution_data": execution_data,
+                    "audio_path": audio_path,
+                    "audio_synth_success": True
+                }
 
             case "toggle":
                 execution_data = ha_command(self, intent=intent, user_input=user_input)
 
                 umschalten = [
-                    f"Schalte {execution_data[2].get('name')} um.",
-                    f"Wechsle den Status von {execution_data[2].get('name')}.",
-                    f"Ändere den Zustand von {execution_data[2].get('name')}.",
-                    f"Invertiere {execution_data[2].get('name')}.",
-                    f"Betätige den Schalter für {execution_data[2].get('name')}."
+                    f"Schalte {execution_data.get("device_name").get('name')} um.",
+                    f"Wechsle den Status von {execution_data.get("device_name").get('name')}.",
+                    f"Ändere den Zustand von {execution_data.get("device_name").get('name')}.",
+                    f"Invertiere {execution_data.get("device_name").get('name')}.",
+                    f"Betätige den Schalter für {execution_data.get("device_name").get('name')}."
                 ]
 
                 output_string: str = random.choice(umschalten)
 
-                self.textToSpeechModule.speak(output_string)
+                audio_path: str = self.textToSpeechModule.speak(output_string)
 
-                return execution_data
+                return {
+                    "execution_data": execution_data,
+                    "audio_path": audio_path,
+                    "audio_synth_success": True
+                }
 
             case _:
                 nicht_verstanden = [
@@ -112,8 +125,13 @@ class backendController:
 
                 output_string = random.choice(nicht_verstanden)
 
-                self.textToSpeechModule.speak(output_string)
-                return None
+                audio_path: str =  self.textToSpeechModule.speak(output_string)
+
+                return {
+                    "execution_data": None,
+                    "audio_path": audio_path,
+                    "audio_synth_success": True
+                }
 
 def ha_command(self, user_input: str, intent: str) -> dict:
     # Extraktion des DeviceName und Abgleich mit der Geräteliste des HomeAssistant
@@ -131,5 +149,14 @@ def ha_command(self, user_input: str, intent: str) -> dict:
     # Aktion an HomeAssistant senden
     self.ha_controller.post_action(action_input)
 
-    return intent, raw_device_name, device_name, action_input
+    # return intent, raw_device_name, device_name, action_input
+
+    result_dict: dict = {
+        "intent": intent,
+        "raw_device_name": raw_device_name,
+        "device_name": device_name,
+        "action_input": action_input
+    }
+
+    return result_dict
     ...

@@ -29,7 +29,7 @@ def _global_spacy_tokenizer(text: str) -> list[str]:
     tokens: list[str] = []
 
     # Relevant POS tags for intent (verbs, adverbs, particles)
-    intent_relevant_pos = {"VERB", "AUX", "ADJ", "ADV", "PART", "ADP"}
+    intent_relevant_pos = {'CCONJ', 'VERB', 'ADP', 'PROPN', 'AUX'}
 
     for token in doc:
         if token.pos_ in intent_relevant_pos:
