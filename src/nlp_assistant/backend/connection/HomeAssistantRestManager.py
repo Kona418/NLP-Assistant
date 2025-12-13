@@ -65,6 +65,7 @@ class HomeAssistantRestManager():
             response.raise_for_status()
 
             print(f"Aktion '{domain}.{service}' auf '{payload.get('entity_id')}' erfolgreich ausgeführt")
+            print(json.dumps(response.json(), indent=4))
             return response.json()
 
         except requests.exceptions.HTTPError as e:
