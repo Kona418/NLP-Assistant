@@ -21,7 +21,7 @@ class backendController:
         # Initialisierung der HomeAssistant Verbindung
         self.ha_manager = HomeAssistantRestManager(
             ha_bearer_token=token, 
-            ha_base_url="http://homeassistant.local:8123"
+            ha_base_url="http://192.168.50.30:8123"
         )
 
         # Initialisierung des HomeAssistant Controllers
