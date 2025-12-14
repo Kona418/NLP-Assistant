@@ -15,10 +15,13 @@ Ein intelligenter Sprachassistent mit Spracherkennung, Natural Language Processi
 
 ## Voraussetzungen
 
-- Docker und Docker Compose
+- Docker und Docker Compose (für Docker-Installation)
+- Python 3.x und Poetry (für lokale Installation)
 - Home Assistant-Instanz mit gültigem Token
 
 ## Installation
+
+### Option 1: Docker (empfohlen)
 
 #### 1. Repository klonen
 ```bash
@@ -49,7 +52,36 @@ docker-compose up -d
 
 Der Container wird automatisch gebaut und gestartet. Die Anwendung ist unter **http://localhost:8501** erreichbar.
 
+### Option 2: Poetry (lokal)
+
+#### 1. Repository klonen
+```bash
+git clone https://github.com/Kona418/NLP-Assistant.git
+cd nlp-assitant
+```
+
+#### 2. Abhängigkeiten installieren
+```bash
+poetry install
+```
+
+#### 3. Umgebungsvariablen setzen
+```bash
+export HA_TOKEN=dein_home_assistant_token
+export KEYWORD=Jarvis
+export HA_URL=http://000.000.00.00:0000
+```
+
+#### 4. Anwendung starten
+```bash
+poetry run streamlit run app.py
+```
+
+Die Anwendung ist unter **http://localhost:8501** erreichbar.
+
 ## Verwendung
+
+### Docker
 
 #### Container starten
 ```bash
@@ -59,6 +91,13 @@ docker-compose up -d
 #### Container stoppen
 ```bash
 docker-compose down
+```
+
+### Poetry
+
+#### Anwendung starten
+```bash
+poetry run streamlit run src\nlp_assistant\frontend\frontend.py
 ```
 
 Die Weboberfläche ist unter **http://localhost:8501** erreichbar.
