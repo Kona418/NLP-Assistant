@@ -161,14 +161,21 @@ class FrontendApp:
 
             audio_path: str = results.get("audio_playback_path")
 
-            if audio_path and os.path.exists(audio_path):
+            st.markdown("""
+                <style>
+                    audio { display: none; }
+                </style>
+                """, unsafe_allow_html=True)
 
+            if audio_path and os.path.exists(audio_path):
                 st.audio(audio_path, format="audio/wav", autoplay=True)
-            # Erfolgs- und Fehlermeldungen der Backend Aktion
-            if results.get("backend_success"):
-                st.success(f"Aktion erfolgreich ausgeführt.")
-            else:
-                st.warning(f"Aktion nicht erfolgreich ausgeführt.")
+
+
+            # # Erfolgs- und Fehlermeldungen der Backend Aktion
+            # if results.get("backend_success"):
+            #     st.success(f"Aktion erfolgreich ausgeführt.")
+            # else:
+            #     st.warning(f"Aktion nicht erfolgreich ausgeführt.")
             
 
             if "error" in results:
