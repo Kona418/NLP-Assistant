@@ -207,4 +207,4 @@ class FrontendApp:
                 st.code(f"Erkanntes Gerät: {device_data}", language="json")
 
 if __name__ == "__main__":
-    FrontendApp().run() 
+    FrontendApp().run()  
