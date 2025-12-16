@@ -29,14 +29,15 @@ class HomeAssistantRestManager():
             print(f"[SIMULATION] Verbindung fehlgeschlagen. Simuliere Aktion: {action_data}")
             return {"success": True, "simulation": True}
 
+        # Kopie erstellen, damit Originaldaten im BackendController nicht verändert werden
+        payload: dict = action_data.copy()
+
         try:
-            domain: str = action_data.pop("domain")
-            service: str = action_data.pop("service")
+            domain: str = payload.pop("domain")
+            service: str = payload.pop("service")
         except KeyError:
             print("Action_data muss 'domain' und 'service' enthalten")
             return None
-
-        payload: dict = action_data
 
         target_name: str | None = payload.pop("name", None)
         target_id: str | None = payload.get("entity_id", None)
@@ -65,7 +66,6 @@ class HomeAssistantRestManager():
             response.raise_for_status()
 
             print(f"Aktion '{domain}.{service}' auf '{payload.get('entity_id')}' erfolgreich ausgeführt")
-            print(json.dumps(response.json(), indent=4))
             return response.json()
 
         except requests.exceptions.HTTPError as e:
