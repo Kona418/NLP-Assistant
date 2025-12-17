@@ -568,6 +568,21 @@ files = [
 ]
 
 [[package]]
+name = "de_core_news_sm"
+version = "3.8.0"
+description = "German pipeline optimized for CPU. Components: tok2vec, tagger, morphologizer, parser, lemmatizer (trainable_lemmatizer), senter, ner."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "de_core_news_sm-3.8.0-py3-none-any.whl", hash = "sha256:fec69fec52b1780f2d269d5af7582a5e28028738bd3190532459aeb473bfa3e7"},
+]
+
+[package.source]
+type = "url"
+url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.8.0/de_core_news_sm-3.8.0-py3-none-any.whl"
+
+[[package]]
 name = "faster-whisper"
 version = "1.2.1"
 description = "Faster Whisper transcription with CTranslate2"
@@ -1254,6 +1269,35 @@ files = [
     {file = "numpy-2.3.5-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:f16417ec91f12f814b10bafe79ef77e70113a2f5f7018640e7425ff979253425"},
     {file = "numpy-2.3.5.tar.gz", hash = "sha256:784db1dcdab56bf0517743e746dfb0f885fc68d948aba86eeec2cba234bdf1c0"},
 ]
+
+[[package]]
+name = "nvidia-cublas-cu12"
+version = "12.9.1.4"
+description = "CUBLAS native runtime libraries"
+optional = false
+python-versions = ">=3"
+groups = ["main"]
+files = [
+    {file = "nvidia_cublas_cu12-12.9.1.4-py3-none-manylinux_2_27_aarch64.whl", hash = "sha256:7a950dae01add3b415a5a5cdc4ec818fb5858263e9cca59004bb99fdbbd3a5d6"},
+    {file = "nvidia_cublas_cu12-12.9.1.4-py3-none-manylinux_2_27_x86_64.whl", hash = "sha256:453611eb21a7c1f2c2156ed9f3a45b691deda0440ec550860290dc901af5b4c2"},
+    {file = "nvidia_cublas_cu12-12.9.1.4-py3-none-win_amd64.whl", hash = "sha256:1e5fee10662e6e52bd71dec533fbbd4971bb70a5f24f3bc3793e5c2e9dc640bf"},
+]
+
+[[package]]
+name = "nvidia-cudnn-cu12"
+version = "9.17.0.29"
+description = "cuDNN runtime libraries"
+optional = false
+python-versions = ">=3"
+groups = ["main"]
+files = [
+    {file = "nvidia_cudnn_cu12-9.17.0.29-py3-none-manylinux_2_27_aarch64.whl", hash = "sha256:0345d17b1614aca938ac6648aa018fc62df5e6ee88474914b9d23ab740253f01"},
+    {file = "nvidia_cudnn_cu12-9.17.0.29-py3-none-manylinux_2_27_x86_64.whl", hash = "sha256:55e49fca81d6873c585eb724a47dfdf17faeceae501e9428bb1c527a085ab4d6"},
+    {file = "nvidia_cudnn_cu12-9.17.0.29-py3-none-win_amd64.whl", hash = "sha256:8b37c0bdb62fea9b2e359f55677c1062bb3cfd1b8f31fb50887e81666b7b5d39"},
+]
+
+[package.dependencies]
+nvidia-cublas-cu12 = "*"
 
 [[package]]
 name = "onnxruntime"
@@ -6917,4 +6961,4 @@ dev = ["pytest", "setuptools"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.15,<3.15"
-content-hash = "29fd2921fbcd7b567a8bc55e76375bd8bf8225b43c82fb24f98b31cc2e7c0bb3"
+content-hash = "cfeff3bb6621fd7cba106f784ddcbcff7a610e29db2d9105de1d9561504213c3"
