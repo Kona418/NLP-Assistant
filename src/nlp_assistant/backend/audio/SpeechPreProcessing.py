@@ -1,54 +1,67 @@
+import os
+import logging
+import importlib
 import dotenv
 import spacy
-import os
-import sys
+import torch
 from faster_whisper import WhisperModel
 from spacy.matcher import PhraseMatcher
 from spacy.tokens import Span
 
-# --- FIX FÜR POETRY/WINDOWS ---
-# Fügt die Nvidia-Libs temporär zum PATH hinzu, damit CTranslate2 sie findet.
-# Dies muss VOR der Initialisierung von WhisperModel passieren.
-def _add_nvidia_paths():
+# Logging Konfiguration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+def _patch_nvidia_paths() -> None:
+    """
+    Fügt Nvidia CUDNN/CUBLAS Binaries temporär zum DLL-Suchpfad hinzu.
+    Notwendig für CTranslate2 (Faster-Whisper) unter Windows/Poetry Umgebungen.
+    """
     try:
-        import nvidia.cudnn
-        import nvidia.cublas
-    except ImportError:
-        return
+        paths_to_add = []
 
-    # Ermittlung der Pfade über __path__ (Liste), falls __file__ None ist
-    def get_module_path(module):
-        if hasattr(module, "__file__") and module.__file__:
-            return os.path.dirname(module.__file__)
-        if hasattr(module, "__path__"):
-            return module.__path__[0]
-        return None
+        for lib_name in ['nvidia.cudnn', 'nvidia.cublas']:
+            try:
+                module = importlib.import_module(lib_name)
+                # Fallback Strategie für Pfad-Ermittlung
+                mod_path = getattr(module, '__file__', None)
+                if mod_path:
+                    base_path = os.path.dirname(mod_path)
+                elif hasattr(module, '__path__'):
+                    base_path = module.__path__[0]
+                else:
+                    continue
+                
+                bin_path = os.path.join(base_path, 'bin')
+                if os.path.exists(bin_path):
+                    paths_to_add.append(bin_path)
+            except ImportError:
+                continue
 
-    cudnn_path = get_module_path(nvidia.cudnn)
-    cublas_path = get_module_path(nvidia.cublas)
-    
-    paths_to_add = []
-    if cudnn_path:
-        paths_to_add.append(os.path.join(cudnn_path, 'bin'))
-    if cublas_path:
-        paths_to_add.append(os.path.join(cublas_path, 'bin'))
-    
-    for path in paths_to_add:
-        if os.path.exists(path):
+        for path in paths_to_add:
             if hasattr(os, 'add_dll_directory'):
                 os.add_dll_directory(path)
             os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
+            
+    except Exception as e:
+        logger.warning(f"Nvidia Path Patching fehlgeschlagen: {e}")
 
-_add_nvidia_paths()
-# ------------------------------
+# Patch vor Laden des Models ausführen
+_patch_nvidia_paths()
+
 
 class SpeechPreProcessing:
     def __init__(self) -> None:
-        # Transkriptionsmodell initialisieren
-        # RTX 2070 unterstützt float16, das ist präziser als int8. 
-        # Falls VRAM knapp ist, bleib bei "int8".
-        print("Lade Whisper Model...")
-        self.model = WhisperModel("turbo", device="cuda", compute_type="float16")
+        # Prüfen auf verfügbare GPU
+        if torch.cuda.is_available():
+            device = "cuda"
+            compute_type = "float16"
+        else:
+            device = "cpu"
+            compute_type = "int8"
+
+        print(f"Lade Whisper Model ({device})...")
+        self.model = WhisperModel("turbo", device=device, compute_type=compute_type)
         
         # Satzextraktion initialisieren
         try:
