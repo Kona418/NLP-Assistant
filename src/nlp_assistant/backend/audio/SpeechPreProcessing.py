@@ -1,53 +1,11 @@
 import dotenv
 import spacy
 import os
-import sys
-import platform # Wichtig für OS-Check
-import torch    # Wichtig, sonst Crash bei torch.cuda.is_available()
+import torch
 from faster_whisper import WhisperModel
 from spacy.matcher import PhraseMatcher
 from spacy.tokens import Span
 
-# --- FIX FÜR POETRY/WINDOWS ---
-def _add_nvidia_paths():
-    # Unter Linux/Docker sofort abbrechen, um Fehler zu vermeiden
-    if platform.system() != "Windows":
-        return
-
-    try:
-        import nvidia.cudnn
-        import nvidia.cublas
-    except ImportError:
-        return
-
-    def get_module_path(module):
-        if hasattr(module, "__file__") and module.__file__:
-            return os.path.dirname(module.__file__)
-        if hasattr(module, "__path__"):
-            return module.__path__[0]
-        return None
-
-    cudnn_path = get_module_path(nvidia.cudnn)
-    cublas_path = get_module_path(nvidia.cublas)
-
-    paths_to_add = []
-    if cudnn_path:
-        paths_to_add.append(os.path.join(cudnn_path, 'bin'))
-    if cublas_path:
-        paths_to_add.append(os.path.join(cublas_path, 'bin'))
-
-    # hashattr check verhindert Crash unter Linux, falls platform check versagt
-    if hasattr(os, 'add_dll_directory'):
-        for path in paths_to_add:
-            if os.path.exists(path):
-                try:
-                    os.add_dll_directory(path)
-                except Exception:
-                    pass
-                os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
-
-# _add_nvidia_paths()
-# ------------------------------
 
 class SpeechPreProcessing:
     def __init__(self) -> None:
@@ -130,6 +88,3 @@ class SpeechPreProcessing:
         except Exception as e:
             print(f"Fehler bei der Extraktion: {e}")
             return ""
-
-
-#Hello World
