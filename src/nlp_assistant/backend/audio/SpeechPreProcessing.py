@@ -46,7 +46,7 @@ def _add_nvidia_paths():
                     pass
                 os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
 
-_add_nvidia_paths()
+# _add_nvidia_paths()
 # ------------------------------
 
 class SpeechPreProcessing:

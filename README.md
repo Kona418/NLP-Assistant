@@ -45,9 +45,14 @@ environment:
 2. Namen eingeben und Token kopieren
 3. Token in der `docker-compose.yml` eintragen
 
-#### 3. Container starten
+#### 3.1 Container starten (CPU)
 ```bash
 docker-compose up -d
+```
+
+#### 3.2 Container starten (GPU)
+```bash
+docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d --build
 ```
 
 Der Container wird automatisch gebaut und gestartet. Die Anwendung ist unter **http://localhost:8501** erreichbar.
