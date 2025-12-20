@@ -568,6 +568,21 @@ files = [
 ]
 
 [[package]]
+name = "de_core_news_lg"
+version = "3.8.0"
+description = "German pipeline optimized for CPU. Components: tok2vec, tagger, morphologizer, parser, lemmatizer (trainable_lemmatizer), senter, ner."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "de_core_news_lg-3.8.0-py3-none-any.whl", hash = "sha256:36fda650e476b54d5e87803635e36dadd1e8e034c4b5962088586d684f4c9fed"},
+]
+
+[package.source]
+type = "url"
+url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_lg-3.8.0/de_core_news_lg-3.8.0-py3-none-any.whl"
+
+[[package]]
 name = "de_core_news_sm"
 version = "3.8.0"
 description = "German pipeline optimized for CPU. Components: tok2vec, tagger, morphologizer, parser, lemmatizer (trainable_lemmatizer), senter, ner."
@@ -6961,4 +6976,4 @@ dev = ["pytest", "setuptools"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.15,<3.15"
-content-hash = "cfeff3bb6621fd7cba106f784ddcbcff7a610e29db2d9105de1d9561504213c3"
+content-hash = "fbc3c299e01c35bd0490c80c17c0d2f8554309bf0a4a3333558728ad339471e6"

@@ -1,35 +1,31 @@
-FROM python:3.13-slim
+FROM python:3.12-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    POETRY_VIRTUALENVS_CREATE=false \
-    PYTHONPATH="/app/src"
+# System-Tools für Audio und Installation
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    curl \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1
+
+# Poetry installieren
+RUN pip install --no-cache-dir poetry
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    ffmpeg \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Das gesamte Verzeichnis kopieren
+COPY . .
 
-RUN pip install --no-cache-dir poetry
+# Abhängigkeiten via Poetry installieren
+RUN poetry install
 
-COPY pyproject.toml poetry.lock* /app/
+ENV LD_LIBRARY_PATH=/app/.venv/lib/python3.12/site-packages/nvidia/cudnn/lib:/app/.venv/lib/python3.12/site-packages/nvidia/cublas/lib
 
-RUN poetry install --no-interaction --no-ansi --no-root
-
-RUN python -m spacy download de_core_news_sm && \
-    python -m spacy download de_core_news_lg
-
-COPY . /app
-
-RUN mkdir -p src/nlp_assistant/data/audio
-
+# Port für Streamlit
 EXPOSE 8501
 
-# Healthcheck
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
-
-# Start the application
-ENTRYPOINT ["streamlit", "run", "src/nlp_assistant/frontend/frontend.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Startbefehl via poetry run
+ENTRYPOINT ["poetry", "run", "streamlit", "run", "src/nlp_assistant/frontend/frontend.py", "--server.port=8501", "--server.address=0.0.0.0"]

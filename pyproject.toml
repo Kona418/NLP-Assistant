@@ -24,6 +24,7 @@ dependencies = [
     "de-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.8.0/de_core_news_sm-3.8.0-py3-none-any.whl",
     "nvidia-cublas-cu12 (>=12.9.1.4,<13.0.0.0)",
     "nvidia-cudnn-cu12 (>=9.17.0.29,<10.0.0.0)",
+    "de-core-news-lg @ https://github.com/explosion/spacy-models/releases/download/de_core_news_lg-3.8.0/de_core_news_lg-3.8.0-py3-none-any.whl",
 ]
 
 [tool.poetry]
